@@ -152,7 +152,40 @@ def calcul_center_of_gravity(masses,xb,xe):
     zg=zg/tm
     return (xg,0,zg)
 
-def PD_strip_info(masses,coord):
+def PD_strip_info_from_for_to_aft(masses,coord):
+    all_coord=calculation_coord(coord)
+    mass=mass_list(masses)
+    list_x=[]
+    f=open("data_pdstrip.csv","w")
+    for coord in all_coord:
+        if coord[0] not in list_x:
+            list_x.append(coord[0])
+    list_x.sort()
+    print (list_x)
+    n_x=len(list_x)
+    for i in range (n_x-1):
+        back=list_x[n_x-i-2]
+        forw=list_x[n_x-i-1]
+        list_coord=[]
+        for coord in all_coord:
+            if coord[0]==back or coord[0]==forw:
+                list_coord.append(coord)
+        m=mass_calculation(mass,back,forw)
+        xg,yg,zg=calcul_center_of_gravity(mass,back,forw)
+        xg,yg,zg=conversion_coordinate_to_pdstrip((xg,yg,zg),Lpp/2)
+        rx2=calcul_rx2(list_coord,yg, zg)
+        ry2=calcul_ry2(list_coord,xg,zg)
+        rz2=calcul_rz2(list_coord,xg, yg)
+        xy=calcule_xy(list_coord,xg, yg)
+        yz=calcul_yz(list_coord,yg, zg)
+        xz=calcul_xz(list_coord,xg, zg)
+        data=[m,xg,yg,zg,rx2,ry2,rz2,xy,yz,xz]
+        for inf in data:
+            f.write(str(inf)+" ")
+        f.write("\n")
+    f.close()
+    return
+def PD_strip_info_from_aft_to_for(masses,coord):
     all_coord=calculation_coord(coord)
     mass=mass_list(masses)
     list_x=[]
@@ -185,7 +218,6 @@ def PD_strip_info(masses,coord):
         f.write("\n")
     f.close()
     return
-
 #print (mass_calculation(list_of_masses,70,80))
 #print(calcul_center_of_gravity(list_of_masses,70,80))
 coord=calculation_coord("frame_try.asc")
@@ -199,4 +231,4 @@ rz2=calcul_rz2(coord,xg,yg)
 xy=calcule_xy(coord,xg,yg)
 yz=calcul_yz(coord,yg,zg)
 xz=calcul_xz(coord,xg, zg)
-PD_strip_info("masses.csv","correct_frames_of_oural.asc")
+PD_strip_info_from_for_to_aft("masses.csv","correct_frames_of_oural.asc")
