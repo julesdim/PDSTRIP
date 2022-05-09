@@ -2,6 +2,9 @@ import csv
 from io import StringIO
 import numpy as np
 import matplotlib.pyplot as plt
+Lpp=135
+def conversion_coordinate_to_pdstrip(coord,midship_section):
+    return (coord[0]-midship_section,coord[1],coord[2])
 
 def calculation_coord(filename):
     fichier=open(filename,"r",encoding="utf-8")
@@ -23,6 +26,8 @@ def calculation_coord(filename):
         if compt_ligne!=0 and len (new)==3 :
             y=(float(new[0]))
             z=(float(new[1]))
+            coord_act=(x,y,z)
+
             coord.append((x,y,z))
             debut_frame=True
         compt_ligne+=1
@@ -167,6 +172,7 @@ def PD_strip_info(masses,coord):
                 list_coord.append(coord)
         m=mass_calculation(mass,back,forw)
         xg,yg,zg=calcul_center_of_gravity(mass,back,forw)
+        xg,yg,zg=conversion_coordinate_to_pdstrip((xg,yg,zg),Lpp/2)
         rx2=calcul_rx2(list_coord,yg, zg)
         ry2=calcul_ry2(list_coord,xg,zg)
         rz2=calcul_rz2(list_coord,xg, yg)
