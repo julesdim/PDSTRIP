@@ -218,6 +218,7 @@ def PD_strip_info_from_aft_to_for(masses,coord):
         f.write("\n")
     f.close()
     return
+
 #print (mass_calculation(list_of_masses,70,80))
 #print(calcul_center_of_gravity(list_of_masses,70,80))
 coord=calculation_coord("frame_try.asc")
