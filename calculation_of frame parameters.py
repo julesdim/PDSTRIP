@@ -155,7 +155,7 @@ def calcul_center_of_gravity(masses,xb,xe):
     zg=zg/tm
     return (xg,0,zg)
 
-def PD_strip_info_from_for_to_aft_mid_frame (masses,coord):
+def PD_strip_info_from_aft_to_for_mid_frame (masses,coord):
     all_coord=calculation_coord(coord)
     mass=mass_list(masses)
     list_x=[]
@@ -168,19 +168,18 @@ def PD_strip_info_from_for_to_aft_mid_frame (masses,coord):
     n_x=len(list_x)
     for i in range (n_x-1):
         if i==0:
+            back=list_x[0]
+            forw=(list_x[0]+list_x[1])/2
+        elif i==n_x-2:
             forw=list_x[-1]
             back=(list_x[-1]+list_x[-2])/2
-        elif i==n_x-2:
-            forw=(list_x[1]+list_x[0])/2
-            back=list_x[0]
         else:
-            forw = (list_x[n_x - i -1  ] + list_x[n_x - i - 2]) / 2
-            back=(list_x[n_x-i-2]+list_x[n_x-i-3])/2
+            forw = (list_x[ i+2 ] + list_x[i+1]) / 2
+            back=(list_x[i+1]+list_x[i])/2
         list_coord=[]
         for coord in all_coord:
             if coord[0]>=back and coord[0]<=forw:
                 list_coord.append(coord)
-
         if len(list_coord)==0:
             print(i)
         m=mass_calculation(mass,back,forw)
@@ -214,4 +213,4 @@ rz2=calcul_rz2(coord,xg,yg)
 xy=calcule_xy(coord,xg,yg)
 yz=calcul_yz(coord,yg,zg)
 xz=calcul_xz(coord,xg, zg)
-PD_strip_info_from_for_to_aft_mid_frame("masses.csv","correct_frames_of_oural.asc")
+PD_strip_info_from_aft_to_for_mid_frame("masses.csv","correct_frames_of_oural.asc")
