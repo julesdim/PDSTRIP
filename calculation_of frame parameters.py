@@ -102,15 +102,18 @@ def mass_list (masses):
     fichier=open(masses,"rt")
     liste_masses=[]
     les_lignes=fichier.readlines()
+    total_mass=0
     for ligne in les_lignes:
         ligne=ligne.strip("\n").split(";")
         m=float(ligne[0])
+        total_mass+=m
         xb = float(ligne[1])
         xe = float(ligne[2])
         xg = float(ligne[3])
         yr = float(ligne[4])
         z = float(ligne[5])
         liste_masses.append((m,xb,xe,xg,yr,z))
+    print(total_mass,"tm")
     return liste_masses
 
 list_of_masses=mass_list("masses.csv")
@@ -152,7 +155,7 @@ def calcul_center_of_gravity(masses,xb,xe):
     zg=zg/tm
     return (xg,0,zg)
 
-def PD_strip_info_from_for_to_aft(masses,coord):
+def PD_strip_info_from_for_to_aft_mid_frame (masses,coord):
     all_coord=calculation_coord(coord)
     mass=mass_list(masses)
     list_x=[]
@@ -163,14 +166,23 @@ def PD_strip_info_from_for_to_aft(masses,coord):
     list_x.sort()
     print (list_x)
     n_x=len(list_x)
-    for i in range (n_x-1):
-        back=list_x[n_x-i-2]
-        forw=list_x[n_x-i-1]
+    total_mass=0
+    for i in range (n_x):
+        if i==0:
+            forw=135
+            back=(list_x[-1]+list_x[-2])/2
+        elif i==n_x-1:
+            forw=(list_x[0]+list_x[1])/2
+            back=0
+        else:
+            forw = (list_x[n_x - i ] + list_x[n_x - i - 1]) / 2
+            back=(list_x[n_x-i-2]+list_x[n_x-i-1])/2
         list_coord=[]
         for coord in all_coord:
-            if coord[0]==back or coord[0]==forw:
+            if coord[0]>=back and coord[0]<=forw:
                 list_coord.append(coord)
         m=mass_calculation(mass,back,forw)
+        total_mass+=m
         xg,yg,zg=calcul_center_of_gravity(mass,back,forw)
         xg,yg,zg=conversion_coordinate_to_pdstrip((xg,yg,zg),Lpp/2)
         rx2=calcul_rx2(list_coord,yg, zg)
@@ -179,12 +191,15 @@ def PD_strip_info_from_for_to_aft(masses,coord):
         xy=calcule_xy(list_coord,xg, yg)
         yz=calcul_yz(list_coord,yg, zg)
         xz=calcul_xz(list_coord,xg, zg)
-        data=[m,xg,yg,zg,rx2,ry2,rz2,xy,yz,xz]
+        data=[m/1000,xg,yg,zg,rx2,ry2,rz2,xy,yz,xz]
         for inf in data:
             f.write(str(inf)+" ")
         f.write("\n")
     f.close()
+    #print(total_mass)
+    #total mass is checked
     return
+
 def PD_strip_info_from_aft_to_for(masses,coord):
     all_coord=calculation_coord(coord)
     mass=mass_list(masses)
@@ -232,4 +247,4 @@ rz2=calcul_rz2(coord,xg,yg)
 xy=calcule_xy(coord,xg,yg)
 yz=calcul_yz(coord,yg,zg)
 xz=calcul_xz(coord,xg, zg)
-PD_strip_info_from_for_to_aft("masses.csv","correct_frames_of_oural.asc")
+PD_strip_info_from_for_to_aft_mid_frame("masses.csv","correct_frames_of_oural.asc")
