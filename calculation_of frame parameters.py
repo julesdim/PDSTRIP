@@ -166,23 +166,24 @@ def PD_strip_info_from_for_to_aft_mid_frame (masses,coord):
     list_x.sort()
     print (list_x)
     n_x=len(list_x)
-    total_mass=0
-    for i in range (n_x):
+    for i in range (n_x-1):
         if i==0:
-            forw=135
+            forw=list_x[-1]
             back=(list_x[-1]+list_x[-2])/2
-        elif i==n_x-1:
-            forw=(list_x[0]+list_x[1])/2
-            back=0
+        elif i==n_x-2:
+            forw=(list_x[1]+list_x[0])/2
+            back=list_x[0]
         else:
-            forw = (list_x[n_x - i ] + list_x[n_x - i - 1]) / 2
-            back=(list_x[n_x-i-2]+list_x[n_x-i-1])/2
+            forw = (list_x[n_x - i -1  ] + list_x[n_x - i - 2]) / 2
+            back=(list_x[n_x-i-2]+list_x[n_x-i-3])/2
         list_coord=[]
         for coord in all_coord:
             if coord[0]>=back and coord[0]<=forw:
                 list_coord.append(coord)
+
+        if len(list_coord)==0:
+            print(i)
         m=mass_calculation(mass,back,forw)
-        total_mass+=m
         xg,yg,zg=calcul_center_of_gravity(mass,back,forw)
         xg,yg,zg=conversion_coordinate_to_pdstrip((xg,yg,zg),Lpp/2)
         rx2=calcul_rx2(list_coord,yg, zg)
@@ -196,43 +197,9 @@ def PD_strip_info_from_for_to_aft_mid_frame (masses,coord):
             f.write(str(inf)+" ")
         f.write("\n")
     f.close()
-    #print(total_mass)
     #total mass is checked
     return
 
-def PD_strip_info_from_aft_to_for(masses,coord):
-    all_coord=calculation_coord(coord)
-    mass=mass_list(masses)
-    list_x=[]
-    f=open("data_pdstrip.csv","w")
-    for coord in all_coord:
-        if coord[0] not in list_x:
-            list_x.append(coord[0])
-    list_x.sort()
-    print (list_x)
-    n_x=len(list_x)
-    for i in range (n_x-1):
-        back=list_x[i]
-        forw=list_x[i+1]
-        list_coord=[]
-        for coord in all_coord:
-            if coord[0]==back or coord[0]==forw:
-                list_coord.append(coord)
-        m=mass_calculation(mass,back,forw)
-        xg,yg,zg=calcul_center_of_gravity(mass,back,forw)
-        xg,yg,zg=conversion_coordinate_to_pdstrip((xg,yg,zg),Lpp/2)
-        rx2=calcul_rx2(list_coord,yg, zg)
-        ry2=calcul_ry2(list_coord,xg,zg)
-        rz2=calcul_rz2(list_coord,xg, yg)
-        xy=calcule_xy(list_coord,xg, yg)
-        yz=calcul_yz(list_coord,yg, zg)
-        xz=calcul_xz(list_coord,xg, zg)
-        data=[m,xg,yg,zg,rx2,ry2,rz2,xy,yz,xz]
-        for inf in data:
-            f.write(str(inf)+" ")
-        f.write("\n")
-    f.close()
-    return
 
 #print (mass_calculation(list_of_masses,70,80))
 #print(calcul_center_of_gravity(list_of_masses,70,80))
