@@ -3,7 +3,7 @@ from io import StringIO
 import numpy as np
 import matplotlib.pyplot as plt
 
-Lpp = 135
+Lpp = 100
 
 
 def conversion_coordinate_to_pdstrip(coord, midship_section):
@@ -232,24 +232,24 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     list_x.sort()  # we sort the info
     print(list_x)
     n_x = len(list_x)
-    # for every sections we have the backward and the forward
+    # for every section we have the backward and the forward
     for i in range(n_x - 1):
-        if i == 0:
-            back = list_x[0]
-            # forward middle of the section
-            forw = (list_x[0] + list_x[1]) / 2
-        elif i == n_x - 2:
-            forw = list_x[-1]
-            # backward the middle of the section
-            back = (list_x[-1] + list_x[-2]) / 2
-        else:
-            # forward and backward are the middle of the offset frames
-            forw = (list_x[i + 2] + list_x[i + 1]) / 2
-            back = (list_x[i + 1] + list_x[i]) / 2
+        # if i == 0:
+        #     back = list_x[0]
+        #     # forward middle of the section
+        #     forw = (list_x[0] + list_x[1]) / 2
+        # elif i == n_x - 2:
+        #     forw = list_x[-1]
+        #     # backward the middle of the section
+        #     back = (list_x[-1] + list_x[-2]) / 2
+        # else:
+        #     # forward and backward are the middle of the offset frames
+        forw = list_x[i + 1]
+        back = list_x[i]
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section
-            if coord[0] >= back and coord[0] <= forw:
+            if back <= coord[0] <= forw:
                 list_coord.append(coord)
         # calculation of every information needed by PD strip code
         m = mass_calculation(mass, back, forw)
@@ -261,10 +261,10 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         xy = calcul_xy(list_coord, xg, yg)
         yz = calcul_yz(list_coord, yg, zg)
         xz = calcul_xz(list_coord, xg, zg)
-        # mass is devided by 1000 because PD strip unity is the ton instead of kg
+        # mass is divided by 1000 because PD strip unity is the ton instead of kg
         data = [m / 1000, xg, yg, zg, rx2, ry2, rz2, xy, yz, xz]
         for inf in data:
-            # we write every inputs for the section
+            # we write every input for the section
             f.write(str(inf) + " ")
         f.write("\n")
     f.close()
@@ -279,4 +279,10 @@ coord = calculation_coord("frame_try.asc")
 zg = 3.372587
 yg = 0
 xg = 90.01621
-PD_strip_info_from_aft_to_for_mid_frame("masses.csv", "correct_frames_of_oural.asc")
+rx2 = calcul_rx2(coord, yg, zg)
+ry2 = calcul_ry2(coord, xg, zg)
+rz2 = calcul_rz2(coord, xg, yg)
+xy = calcul_xy(coord, xg, yg)
+yz = calcul_yz(coord, yg, zg)
+xz = calcul_xz(coord, xg, zg)
+PD_strip_info_from_aft_to_for_mid_frame("masses1.csv", "barge_standaard_pias_text_file.txt")
