@@ -89,7 +89,7 @@ def calcul_rz2(coord, xg, yg):
     for i in range(len(coord)):
         x = coord[i][0]
         y = -coord[i][1]
-        sum += (x - xg) ** 2 + (y - yg) ** 27
+        sum += (x - xg) ** 2 + (y - yg) ** 2
     # we return the average
     return sum / 2 * len(coord)
 
@@ -231,18 +231,20 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     n_x = len(list_x)
     # for every section we have the backward and the forward
     for i in range(n_x - 1):
-        if i == 0:
-             back = list_x[0]
-             # forward middle of the section
-             forw = (list_x[0] + list_x[1]) / 2
-        #elif i == n_x - 2:
-        #     forw = list_x[-1]
-             # backward the middle of the section
-        #     back = (list_x[-1] + list_x[-2]) / 2
-        else:
-             # forward and backward are the middle of the offset frames
-            forw = (list_x[i + 1]+list_x[i])/2
-            back = (list_x[i]+list_x[i-1])/2
+        #if i == 0:
+        #    back = list_x[0]
+        #    #forward middle of the section
+        #    forw = (list_x[0] + list_x[1]) / 2
+         # #elif i == n_x - 2:
+         # #     forw = list_x[-1]
+         #      # backward the middle of the section
+         # #     back = (list_x[-1] + list_x[-2]) / 2
+        #else:
+        #     # forward and backward are the middle of the offset frames
+        #     forw = (list_x[i + 1]+list_x[i])/2
+        #     back = (list_x[i]+list_x[i-1])/2
+        back=(list_x[i]+list_x[i+1])/2
+        forw=100
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section
