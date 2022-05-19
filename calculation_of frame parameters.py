@@ -168,9 +168,6 @@ def mass_list(masses):
     return list_of_masses
 
 
-list_of_masses = mass_list("masses.csv")
-
-
 def mass_calculation(masses_list, xb, xe):
     """The inputs are the list of the masses in the ship, and the beginning of the frame where we want to calculate the center
     of gravity, along the x axis, xb and xe.
@@ -234,18 +231,18 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     n_x = len(list_x)
     # for every section we have the backward and the forward
     for i in range(n_x - 1):
-        # if i == 0:
-        #     back = list_x[0]
-        #     # forward middle of the section
-        #     forw = (list_x[0] + list_x[1]) / 2
-        # elif i == n_x - 2:
+        if i == 0:
+             back = list_x[0]
+             # forward middle of the section
+             forw = (list_x[0] + list_x[1]) / 2
+        #elif i == n_x - 2:
         #     forw = list_x[-1]
-        #     # backward the middle of the section
+             # backward the middle of the section
         #     back = (list_x[-1] + list_x[-2]) / 2
-        # else:
-        #     # forward and backward are the middle of the offset frames
-        forw = list_x[i + 1]
-        back = list_x[i]
+        else:
+             # forward and backward are the middle of the offset frames
+            forw = (list_x[i + 1]+list_x[i])/2
+            back = (list_x[i]+list_x[i-1])/2
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section
@@ -272,10 +269,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     return
 
 
-# print (mass_calculation(list_of_masses,70,80))
-# print(calcul_center_of_gravity(list_of_masses,70,80))
 coord = calculation_coord("frame_try.asc")
-# print(coord)
 zg = 3.372587
 yg = 0
 xg = 90.01621
