@@ -245,6 +245,9 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         #     back = (list_x[i]+list_x[i-1])/2
         back=(list_x[i]+list_x[i+1])/2
         forw=100
+        #accortding the documentation we take the part in front of the section we take
+        #which is the middle between each offset section
+        #We need to know if we have to go from the font to the back or from the back to the front
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section
