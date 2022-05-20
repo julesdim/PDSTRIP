@@ -243,8 +243,8 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         #     # forward and backward are the middle of the offset frames
         #     forw = (list_x[i + 1]+list_x[i])/2
         #     back = (list_x[i]+list_x[i-1])/2
-        back=(list_x[i]+list_x[i+1])/2
-        forw=100
+        back = (list_x[i]+list_x[i+1]) / 2
+        forw = 100
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section
