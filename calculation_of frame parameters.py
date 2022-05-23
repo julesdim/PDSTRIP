@@ -23,6 +23,7 @@ def calculation_coord(filename):
     x = 0  # initialisation of coordinates
     y = 0
     z = 0
+    les_z=[]
     coord = []  # initialisation of the list of coordinates
     for line in the_lines:
         new = line[0].strip().split()  # formating the line
@@ -35,11 +36,13 @@ def calculation_coord(filename):
         if line_counter != 0 and len(new) == 3:
             y = (float(new[0]))
             z = (float(new[1]))
+            les_z.append(z)
             coord_act = (x, y, z)  # we get the coordinates of the actual point
             coord.append((x, y, z))  # we append to the list
             beg_frame = True  # the next time len(new)==1 it will be the beginning of a new frame
         line_counter += 1
     file.close()
+    print(les_z)
     return coord
 
 
@@ -180,8 +183,7 @@ def mass_calculation(masses_list, xb, xe):
         xem = masses_list[i][2]  # end of the mass
         if xbm < xe and xem > xb:
             rb = np.max([xb, xbm])  # real beginning of the mass for the section
-            re = np.min([xe,
-                         xem])  # real end of the mass for the section, if the end of the mass is after the end of the section
+            re = np.min([xe,xem])  # real end of the mass for the section, if the end of the mass is after the end of the section
             tm += m * (re - rb) / (xem - xbm)
             # print(m*(re-rb)/(xem-xbm))
     return tm
@@ -209,8 +211,28 @@ def calcul_center_of_gravity(list_masses, xb, xe):
             xg += rm * (re + rb) / 2
             zg += rm * list_masses[i][5]
             # print(masses[i][5])
-    xg = xg / tm
-    zg = zg / tm
+    try:
+        xg = xg / tm
+        zg = zg / tm
+    except ZeroDivisionError:
+        the_coord=calculation_coord("barge_standaard_pias_text_file.txt")
+        sum=0
+        sum_z=0
+        y=0
+        z=0
+        the_x=[]
+        for coord in the_coord:
+            if coord[0]<=xe and coord[0]>=xb and coord[2]!=0:
+                if coord[0] not in the_x:
+                    the_x.append(coord[0])
+                y+=coord[1]
+                z+=coord[2]
+                sum+=1
+                sum_z+=1
+        sum_z+=len(the_x) #pour prendre en compte le bas du bateau
+        xg=(xb+xe)/2
+        yg=y/sum
+        zg=z/sum_z
     return (xg, 0, zg)
 
 
