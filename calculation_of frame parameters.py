@@ -23,7 +23,7 @@ def calculation_coord(filename):
     x = 0  # initialisation of coordinates
     y = 0
     z = 0
-    les_z=[]
+    les_z = []
     coord = []  # initialisation of the list of coordinates
     for line in the_lines:
         new = line[0].strip().split()  # formating the line
@@ -183,7 +183,8 @@ def mass_calculation(masses_list, xb, xe):
         xem = masses_list[i][2]  # end of the mass
         if xbm < xe and xem > xb:
             rb = np.max([xb, xbm])  # real beginning of the mass for the section
-            re = np.min([xe,xem])  # real end of the mass for the section, if the end of the mass is after the end of the section
+            re = np.min([xe,
+                         xem])  # real end of the mass for the section, if the end of the mass is after the end of the section
             tm += m * (re - rb) / (xem - xbm)
             # print(m*(re-rb)/(xem-xbm))
     return tm
@@ -215,24 +216,24 @@ def calcul_center_of_gravity(list_masses, xb, xe):
         xg = xg / tm
         zg = zg / tm
     except ZeroDivisionError:
-        the_coord=calculation_coord("barge_standaard_pias_text_file.txt")
-        sum=0
-        sum_z=0
-        y=0
-        z=0
-        the_x=[]
+        the_coord = calculation_coord("barge_standaard_pias_text_file.txt")
+        sum = 0
+        sum_z = 0
+        y = 0
+        z = 0
+        the_x = []
         for coord in the_coord:
-            if coord[0]<=xe and coord[0]>=xb and coord[2]!=0:
+            if coord[0] <= xe and coord[0] >= xb and coord[2] != 0:
                 if coord[0] not in the_x:
                     the_x.append(coord[0])
-                y+=coord[1]
-                z+=coord[2]
-                sum+=1
-                sum_z+=1
-        sum_z+=len(the_x) #pour prendre en compte le bas du bateau
-        xg=(xb+xe)/2
-        yg=y/sum
-        zg=z/sum_z
+                y += coord[1]
+                z += coord[2]
+                sum += 1
+                sum_z += 1
+        sum_z += len(the_x)  # pour prendre en compte le bas du bateau
+        xg = (xb + xe) / 2
+        yg = y / sum
+        zg = z / sum_z
     return (xg, 0, zg)
 
 
@@ -253,19 +254,19 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     n_x = len(list_x)
     # for every section we have the backward and the forward
     for i in range(n_x - 1):
-        #if i == 0:
+        # if i == 0:
         #    back = list_x[0]
         #    #forward middle of the section
         #    forw = (list_x[0] + list_x[1]) / 2
-         # #elif i == n_x - 2:
-         # #     forw = list_x[-1]
-         #      # backward the middle of the section
-         # #     back = (list_x[-1] + list_x[-2]) / 2
-        #else:
+        # #elif i == n_x - 2:
+        # #     forw = list_x[-1]
+        #      # backward the middle of the section
+        # #     back = (list_x[-1] + list_x[-2]) / 2
+        # else:
         #     # forward and backward are the middle of the offset frames
         #     forw = (list_x[i + 1]+list_x[i])/2
         #     back = (list_x[i]+list_x[i-1])/2
-        back = (list_x[i]+list_x[i+1]) / 2
+        back = (list_x[i] + list_x[i + 1]) / 2
         forw = 100
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
