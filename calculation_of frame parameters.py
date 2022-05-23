@@ -68,6 +68,7 @@ def correction_of_coordinates(list_coord):
     return list_coord
 
 
+
 def calcul_rx2(coord, yg, zg):
     """inputs are a list of coord and yg zg coordinates of the center of gravity
     it returns the square of the inertial radius along x axis, by an average of (y-yg)**2+(z-zg)**2"""
