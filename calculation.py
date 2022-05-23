@@ -279,7 +279,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     computation"""
     all_coord = calculation_coord(coord)# list of the coordinates
     all_coord = correction_of_coordinates(all_coord)
-    print_section(all_coord,40)
+    print_section(all_coord,50)
     mass = mass_list(masses)  # list of the masses
     list_x = []  # initialization of the x coordinates of the sections
     f = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
@@ -287,7 +287,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         if coord[0] not in list_x:
             list_x.append(coord[0])  # we append just one time every x coordinates of the frames
     list_x.sort()  # we sort the info
-    print(list_x)
+    #print(list_x,"x")
     n_x = len(list_x)
     # for every section we have the backward and the forward
     for i in range(n_x - 1):
@@ -338,4 +338,3 @@ xg = 90.01621
 rx2 = calcul_rx2(coord, yg, zg)
 ry2 = calcul_ry2(coord, xg, zg)
 rz2 = calcul_rz2(coord, xg, yg)
-PD_strip_info_from_aft_to_for_mid_frame("masses1.csv","barge_standaard_pias_text_file.txt")
