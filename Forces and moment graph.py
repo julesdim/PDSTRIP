@@ -42,11 +42,11 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
         if ex_wave_length == wave_length and ex_wave_angle == wave_angle and ex_wave_frequency == wave_freq and ex_speed == speed:
             if new[0] == "Force":
                 x = float(new[1])
-                el_force_x = float(new[2])
-                el_force_y = float(new[5])
+                #el_force_x = float(new[2])
+                #el_force_y = float(new[5])
                 el_force_z = float(new[8])
-                forces_along_x.append(el_force_x)
-                forces_along_y.append(el_force_y)
+                #forces_along_x.append(el_force_x)
+                #forces_along_y.append(el_force_y)
                 forces_along_z.append(el_force_z)
                 if x not in les_x:
                     les_x.append(x)
@@ -54,28 +54,25 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
                 break
             if new[0] == "Moment":
                 line_counter += 1
-                el_moment_x = float(new[1])
+                #el_moment_x = float(new[1])
                 el_moment_y = float(new[4])
-                el_moment_z = float(new[7])
-                moment_along_x.append(el_moment_x)
+                #el_moment_z = float(new[7])
+                #moment_along_x.append(el_moment_x)
                 moment_along_y.append(el_moment_y)
-                moment_along_z.append(el_moment_z)
-    print(forces_along_x)
-    print(forces_along_y)
+                #moment_along_z.append(el_moment_z)
+    #print(forces_along_x)
+    #print(forces_along_y)
     print(forces_along_z)
-    print(moment_along_x)
+    #print(moment_along_x)
     print(moment_along_y)
-    print(moment_along_z)
-    all_el = [forces_along_x, forces_along_y, forces_along_z, moment_along_x, moment_along_y, moment_along_z]
-    list_title = ["x", "y", "z"]
-    n_all_el = len(all_el)
-    for i in range(n_all_el):
-        plt.plot(les_x, all_el[i])
-        if i <= 2:
-            plt.title("Forces along " + list_title[i] + " axis")
-        if i > 2:
-            plt.title("Moment along " + list_title[i - 3] + " axis")
-        plt.show()
+    #print(moment_along_z)
+    plt.plot(les_x,forces_along_z)
+    plt.title("Forces along Z axis")
+    plt.show()
+    plt.plot(les_x,moment_along_y)
+    plt.title("Moment along y axis")
+    plt.show()
+
     return
 
 
