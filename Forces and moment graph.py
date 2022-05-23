@@ -21,9 +21,11 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
     for line in the_lines:
         try:
             new = line[0].strip().split()
-        except:
-            new = ["error", "error", "error"]
+        except IndexError:
+            pass
         print(new)
+        if len(new)==0:
+            new=["error","error","error"]
         if new[0] == "wave" and new[2] == "frequency":
             ex_wave_frequency = float(new[3])
         if new[0] == "wave" and new[1] == "length":
