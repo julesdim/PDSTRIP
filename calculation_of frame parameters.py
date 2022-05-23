@@ -240,13 +240,14 @@ def calcul_center_of_gravity(list_masses, xb, xe):
         zg = zg / tm
     except ZeroDivisionError:
         the_coord = calculation_coord("barge_standaard_pias_text_file.txt")
+        the_coord = correction_of_coordinates(the_coord)
         sum = 0
         sum_z = 0
         y = 0
         z = 0
         the_x = []
         for coord in the_coord:
-            if coord[0] <= xe and coord[0] >= xb and coord[2] != 0:
+            if coord[0] <= xe and coord[0] >= xb :
                 if coord[0] not in the_x:
                     the_x.append(coord[0])
                 y += coord[1]
@@ -259,6 +260,16 @@ def calcul_center_of_gravity(list_masses, xb, xe):
         zg = z / sum_z
     return (xg, 0, zg)
 
+def print_section(list_coord,x):
+    z_coord=[]
+    y_coord=[]
+    print("actif")
+    for coord in list_coord:
+        if coord[0]==x:
+            z_coord.append(coord[2])
+            y_coord.append(coord[1])
+    plt.plot(y_coord,z_coord,"ob")
+    plt.show()
 
 def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     """The inputs are the masses, the loading of the ship as a csv file, explained in the function calcul_center_of_gravity,
@@ -267,6 +278,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     computation"""
     all_coord = calculation_coord(coord)# list of the coordinates
     all_coord = correction_of_coordinates(all_coord)
+    print_section(all_coord,40)
     mass = mass_list(masses)  # list of the masses
     list_x = []  # initialization of the x coordinates of the sections
     f = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
@@ -325,7 +337,3 @@ xg = 90.01621
 rx2 = calcul_rx2(coord, yg, zg)
 ry2 = calcul_ry2(coord, xg, zg)
 rz2 = calcul_rz2(coord, xg, yg)
-xy = calcul_xy(coord, xg, yg)
-yz = calcul_yz(coord, yg, zg)
-xz = calcul_xz(coord, xg, zg)
-PD_strip_info_from_aft_to_for_mid_frame("masses1.csv", "barge_standaard_pias_text_file.txt")
