@@ -279,7 +279,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     computation"""
     all_coord = calculation_coord(coord)# list of the coordinates
     all_coord = correction_of_coordinates(all_coord)
-    print_section(all_coord,40)
+    print_section(all_coord,8.5)
     mass = mass_list(masses)  # list of the masses
     list_x = []  # initialization of the x coordinates of the sections
     f = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
