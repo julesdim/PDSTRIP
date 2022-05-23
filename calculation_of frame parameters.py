@@ -3,7 +3,7 @@ from io import StringIO
 import numpy as np
 import matplotlib.pyplot as plt
 
-Lpp = 100
+Lpp = 135
 
 
 def conversion_coordinate_to_pdstrip(coord, midship_section):
@@ -304,7 +304,8 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         #     forw = (list_x[i + 1]+list_x[i])/2
         #     back = (list_x[i]+list_x[i-1])/2
         back = (list_x[i] + list_x[i + 1]) / 2
-        forw = 100
+        forw = Lpp
+        print(forw)
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section
@@ -338,4 +339,4 @@ xg = 90.01621
 rx2 = calcul_rx2(coord, yg, zg)
 ry2 = calcul_ry2(coord, xg, zg)
 rz2 = calcul_rz2(coord, xg, yg)
-PD_strip_info_from_aft_to_for_mid_frame("masses1.csv","barge_standaard_pias_text_file.txt")
+PD_strip_info_from_aft_to_for_mid_frame("masses.csv","correct_frames_of_oural.asc")
