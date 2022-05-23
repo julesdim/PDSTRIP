@@ -223,6 +223,7 @@ def calcul_center_of_gravity(list_masses, xb, xe):
     n = len(list_masses)
     # initialization of the values
     xg = 0
+    yg=0
     zg = 0
     for i in range(n):
         m = list_masses[i][0]
@@ -233,10 +234,12 @@ def calcul_center_of_gravity(list_masses, xb, xe):
             re = np.min([xe, xem])  # same for the end
             rm = m * (re - rb) / (xem - xbm)  # proportion of the mass situated between the section
             xg += rm * (re + rb) / 2
+            yg+= rm*list_masses[i][4]
             zg += rm * list_masses[i][5]
             # print(masses[i][5])
     try:
         xg = xg / tm
+        yg=yg/tm
         zg = zg / tm
     except ZeroDivisionError:
         the_coord = calculation_coord("barge_standaard_pias_text_file.txt")
@@ -258,7 +261,7 @@ def calcul_center_of_gravity(list_masses, xb, xe):
         xg = (xb + xe) / 2
         yg = y / sum
         zg = z / sum_z
-    return (xg, 0, zg)
+    return (xg, yg, zg)
 
 def print_section(list_coord, x):
     z_coord=[]
@@ -322,7 +325,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         yz = calcul_yz(list_coord, yg, zg)
         xz = calcul_xz(list_coord, xg, zg)
         # mass is divided by 1000 because PD strip unity is the ton instead of kg
-        data = [m / 1000, xg, yg, zg, rx2, ry2, rz2, xy, yz, xz]
+        data = [m, xg, yg, zg, rx2, ry2, rz2, xy, yz, xz]
         for inf in data:
             # we write every input for the section
             f.write(str(inf) + " ")
@@ -339,4 +342,4 @@ xg = 90.01621
 rx2 = calcul_rx2(coord, yg, zg)
 ry2 = calcul_ry2(coord, xg, zg)
 rz2 = calcul_rz2(coord, xg, yg)
-PD_strip_info_from_aft_to_for_mid_frame("masses.csv","correct_frames_of_oural.asc")
+PD_strip_info_from_aft_to_for_mid_frame("masses_North_4layers_98.csv","correct_frames_of_oural.asc")
