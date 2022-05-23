@@ -260,7 +260,7 @@ def calcul_center_of_gravity(list_masses, xb, xe):
         zg = z / sum_z
     return (xg, 0, zg)
 
-def print_section(list_coord,x):
+def print_section(list_coord, x):
     z_coord=[]
     y_coord=[]
     print("actif")
@@ -270,6 +270,7 @@ def print_section(list_coord,x):
             y_coord.append(coord[1])
     plt.plot(y_coord,z_coord,"ob")
     plt.show()
+    return
 
 def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     """The inputs are the masses, the loading of the ship as a csv file, explained in the function calcul_center_of_gravity,
