@@ -22,7 +22,8 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
         try:
             new = line[0].strip().split()
         except IndexError:
-            new = ["error"]
+            new = ["error","error","error"]
+        print(new)
         if new[0] == "wave" and new[2] == "frequency":
             ex_wave_frequency = float(new[3])
         if new[0] == "wave" and new[1] == "length":
@@ -73,4 +74,4 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok",0.74,112.52,0,0)
+graph_file_for_one_wave("pdstrip.out.ok",0.05,24646.8,135,0)
