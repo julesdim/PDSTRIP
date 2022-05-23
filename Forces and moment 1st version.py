@@ -29,10 +29,7 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
         if new[0] == "wave" and new[2] == "frequency":
             ex_wave_frequency = float(new[3])
         if new[0] == "wave" and new[1] == "length":
-            try:
-                ex_wave_length = float(new[2])
-            except ValueError:
-                ex_wave_length = 24646.8
+            ex_wave_length = float(new[2])
         if new[0] == "wave" and new[1] == "angle":
             ex_wave_angle = float(new[2])
         if new[0] == "speed":
