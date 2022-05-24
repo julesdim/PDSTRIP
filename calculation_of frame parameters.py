@@ -47,26 +47,30 @@ def calculation_coord(filename):
 
 
 def correction_of_coordinates(list_coord):
-    x_coord = []
-    list_coord_fr = []
-    z_fr = []
-    y_fr = []
+    """Because the PIAS file does not create the coordinates of the top of the frame,
+    with that function for each point not at the max y or max z, it creates a point with the same y, same x but at the top,
+    like this it corrects the zG I think"""
+    x_coord = []  # list of frames coordinates
+    list_coord_fr = []  # for one frame we save the coord of the point
+    z_fr = []  # all the z of the frame
+    y_fr = []  # all the y of the frame
     for coord2 in list_coord:
         if coord2[0] not in x_coord:
-            x_coord.append(coord2[0])
+            x_coord.append(coord2[0])  # we create the list of frame
     for x_fr in x_coord:
         for coord2 in list_coord:
             if coord2[0] == x_fr:
-                list_coord_fr.append(coord2)
-                z_fr.append(coord2[2])
-                y_fr.append(coord2[1])
-        max_z = max(z_fr)
-        max_y = max(y_fr)
+                # for one frame, at x_fr
+                list_coord_fr.append(coord2)  # list of the coordinates for that frame
+                z_fr.append(coord2[2])  # same for the z
+                y_fr.append(coord2[1])  # same for the y
+        max_z = max(z_fr)  # we save the max of z
+        max_y = max(y_fr)  # we save the max of y
         for coord2 in list_coord_fr:
             if coord2[2] < max_z and coord2[1] < max_y:
-                list_coord.append((coord2[0], coord2[1], max_z))
+                list_coord.append(
+                    (coord2[0], coord2[1], max_z))  # we append a point at the same coordinates but at max_z
     return list_coord
-
 
 
 def calcul_rx2(coord, yg, zg):
@@ -194,9 +198,28 @@ def mass_list(masses):
     return list_of_masses
 
 
+def graph_loading(list_mass, x_min, x_max):
+    """That function allow the user to print the weightloading, for a list of mass, and with the
+    boundaries of the ship"""
+    delt_x = 0.1  # value of the strip to calculate the ship loading
+    les_x = np.arange(x_min, x_max + delt_x, delt_x)  # coordinates of each strip
+    n = len(les_x)
+    mass_per_m = [0]  # we initialize the weight loading for x=0, it's equal to 0
+    for i in range(n - 1):
+        x_inf = les_x[i]
+        x_up = les_x[i + 1]
+        # coordinates of the strip i
+        el_mass = mass_calculation(list_mass, x_inf, x_up) / delt_x  # element of mass for the strip
+        mass_per_m.append(el_mass)  # we add to the list
+    plt.plot(les_x, mass_per_m)
+    plt.title("weight loading")
+    plt.show()
+    return
+
+
 def mass_calculation(masses_list, xb, xe):
     """The inputs are the list of the masses in the ship, and the beginning of the frame where we want to calculate the center
-    of gravity, along the x axis, xb and xe.
+    of gravity, along the x-axis, xb and xe.
     It returns the total mass in that section"""
     n = len(masses_list)
     tm = 0
@@ -209,7 +232,24 @@ def mass_calculation(masses_list, xb, xe):
             re = np.min([xe,
                          xem])  # real end of the mass for the section, if the end of the mass is after the end of the section
             tm += m * (re - rb) / (xem - xbm)
+            if xb == 55 and xe == 55.1:
+                # print(m,"m")
+                # print(rb,"rb")
+                # print(re,"re")
+                # print(xbm,"xb")
+                # print(xem,"xe")
+                print(m)
+                print(m * (re - rb) / (xem - xbm), "mass act")
+                print(re - rb)
+                print(tm)
+            # print(m,"m")
+            # print(rb,"rb")
+            # print(re,"re")
+            # print(xbm,"xb")
+            # print(xem,"xe")
+            # print(tm)
             # print(m*(re-rb)/(xem-xbm))
+
     return tm
 
 
@@ -223,7 +263,7 @@ def calcul_center_of_gravity(list_masses, xb, xe):
     n = len(list_masses)
     # initialization of the values
     xg = 0
-    yg=0
+    yg = 0
     zg = 0
     for i in range(n):
         m = list_masses[i][0]
@@ -234,12 +274,12 @@ def calcul_center_of_gravity(list_masses, xb, xe):
             re = np.min([xe, xem])  # same for the end
             rm = m * (re - rb) / (xem - xbm)  # proportion of the mass situated between the section
             xg += rm * (re + rb) / 2
-            yg+= rm*list_masses[i][4]
+            yg += rm * list_masses[i][4]
             zg += rm * list_masses[i][5]
             # print(masses[i][5])
     try:
         xg = xg / tm
-        yg=yg/tm
+        yg = yg / tm
         zg = zg / tm
     except ZeroDivisionError:
         the_coord = calculation_coord("barge_standaard_pias_text_file.txt")
@@ -250,7 +290,7 @@ def calcul_center_of_gravity(list_masses, xb, xe):
         z = 0
         the_x = []
         for coord in the_coord:
-            if coord[0] <= xe and coord[0] >= xb :
+            if coord[0] <= xe and coord[0] >= xb:
                 if coord[0] not in the_x:
                     the_x.append(coord[0])
                 y += coord[1]
@@ -263,27 +303,30 @@ def calcul_center_of_gravity(list_masses, xb, xe):
         zg = z / sum_z
     return (xg, yg, zg)
 
+
 def print_section(list_coord, x):
-    z_coord=[]
-    y_coord=[]
+    z_coord = []
+    y_coord = []
     print("actif")
     for coord in list_coord:
-        if coord[0]==x:
+        if coord[0] == x:
             z_coord.append(coord[2])
             y_coord.append(coord[1])
-    plt.plot(y_coord,z_coord,"ob")
+    plt.plot(y_coord, z_coord, "ob")
     plt.show()
     return
+
 
 def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     """The inputs are the masses, the loading of the ship as a csv file, explained in the function calcul_center_of_gravity,
     the second input is a coordinate file, with the Pias format.
     It returns a csv file with all the information needed for a PD strip input file for a bending moment and shear forces
     computation"""
-    all_coord = calculation_coord(coord)# list of the coordinates
+    all_coord = calculation_coord(coord)  # list of the coordinates
     all_coord = correction_of_coordinates(all_coord)
-    print_section(all_coord,8.5)
+    print_section(all_coord, 8.5)
     mass = mass_list(masses)  # list of the masses
+    graph_loading(mass, 0, 135)
     list_x = []  # initialization of the x coordinates of the sections
     f = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
     for coord in all_coord:
@@ -308,7 +351,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         #     back = (list_x[i]+list_x[i-1])/2
         back = (list_x[i] + list_x[i + 1]) / 2
         forw = Lpp
-        print(i)
+        # print(i)
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section
@@ -342,4 +385,4 @@ xg = 90.01621
 rx2 = calcul_rx2(coord, yg, zg)
 ry2 = calcul_ry2(coord, xg, zg)
 rz2 = calcul_rz2(coord, xg, yg)
-PD_strip_info_from_aft_to_for_mid_frame("masses_North_4layers_98.csv","correct_frames_of_oural.asc")
+PD_strip_info_from_aft_to_for_mid_frame("masses_North_4layers_98.csv", "correct_frames_of_oural.asc")
