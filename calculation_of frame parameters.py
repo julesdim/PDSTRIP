@@ -375,6 +375,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         f.write("\n")
     f.close()
     # total mass is checked
+
     return
 
 
