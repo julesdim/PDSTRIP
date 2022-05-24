@@ -2,7 +2,8 @@ import csv
 from io import StringIO
 import numpy as np
 import matplotlib.pyplot as plt
-
+import essai as xgcalc
+import masses as truc
 Lpp = 135
 
 
@@ -68,8 +69,7 @@ def correction_of_coordinates(list_coord):
         max_y = max(y_fr)  # we save the max of y
         for coord2 in list_coord_fr:
             if coord2[2] < max_z and coord2[1] < max_y:
-                list_coord.append(
-                    (coord2[0], coord2[1], max_z))  # we append a point at the same coordinates but at max_z
+                list_coord.append((coord2[0], coord2[1], max_z))  # we append a point at the same coordinates but at max_z
     return list_coord
 
 
@@ -186,15 +186,23 @@ def mass_list(masses):
     total_mass = 0  # to check the total mass
     for line in the_lines:
         line = line.strip("\n").split(";")  # we stop the line to the \n and we cut the information where there is a ";"
-        m = float(line[0])  # the first info is the object mass
+        m = float(line[0])/1000  # the first info is the object mass
         total_mass += m
         xb = float(line[1])  # the second is the beginning
         xe = float(line[2])  # the end
         xg = float(line[3])  # the exact center of gravity
         yr = float(line[4])  # the turning radius
         z = float(line[5])  # the position along z axis of the center of gravity
-        list_of_masses.append((m, xb, xe, xg, yr, z))  # we append the current value
+        if xg != (xb - xe) / 2:
+            mb_per_meter, me_per_meter = xgcalc.calcul_xg_not_the_mid(m, xb, xe, xg, 0.1)
+        else:
+            me_per_meter=m/(xb-xe)
+            mb_per_meter=me_per_meter
+        mass=truc.Mass(m,xb,xe,xg,yr,z,mb_per_meter,me_per_meter)
+        print(mass.mass)
+        list_of_masses.append(mass)  # we append the current value
     print(total_mass, "tm")
+    print(list_of_masses)
     return list_of_masses
 
 
@@ -224,32 +232,22 @@ def mass_calculation(masses_list, xb, xe):
     n = len(masses_list)
     tm = 0
     for i in range(n):
-        m = masses_list[i][0]
-        xbm = masses_list[i][1]  # beginning of the mass
-        xem = masses_list[i][2]  # end of the mass
+        m = masses_list[i].mass
+        xbm = masses_list[i].xb  # beginning of the mass
+        xem = masses_list[i].xe # end of the mass
+        xgm = masses_list[i].xg
+        mb=masses_list[i].mb_per_meter
+        me=masses_list[i].me_per_meter
         if xbm < xe and xem > xb:
             rb = np.max([xb, xbm])  # real beginning of the mass for the section
-            re = np.min([xe,
-                         xem])  # real end of the mass for the section, if the end of the mass is after the end of the section
-            tm += m * (re - rb) / (xem - xbm)
-            if xb == 55 and xe == 55.1:
-                # print(m,"m")
-                # print(rb,"rb")
-                # print(re,"re")
-                # print(xbm,"xb")
-                # print(xem,"xe")
-                print(m)
-                print(m * (re - rb) / (xem - xbm), "mass act")
-                print(re - rb)
-                print(tm)
-            # print(m,"m")
-            # print(rb,"rb")
-            # print(re,"re")
-            # print(xbm,"xb")
-            # print(xem,"xe")
-            # print(tm)
-            # print(m*(re-rb)/(xem-xbm))
-
+            re = np.min([xe,xem])
+            mbr = mb + (rb - xbm) * (mb - me) / (xbm - xem)
+            mer=mb+(re-xbm)*(mb-me)/(xbm-xem)
+            if xgm != (xbm - xem) / 2:
+                tm+=(re-rb)*(mbr+mer)/2
+            if xgm==(xbm - xem) / 2:
+                # real end of the mass for the section, if the end of the mass is after the end of the section
+                tm+=(re-rb)*(mbr+mer)/2
     return tm
 
 
@@ -266,16 +264,16 @@ def calcul_center_of_gravity(list_masses, xb, xe):
     yg = 0
     zg = 0
     for i in range(n):
-        m = list_masses[i][0]
-        xbm = list_masses[i][1]  # beginning of the mass
-        xem = list_masses[i][2]  # end of the mass
+        m = list_masses[i].mass
+        xbm = list_masses[i].xb  # beginning of the mass
+        xem = list_masses[i].xe  # end of the mass
         if xbm < xe and xem > xb:
             rb = np.max([xb, xbm])  # real beginning of the mass, if the mass begins before the frame
             re = np.min([xe, xem])  # same for the end
             rm = m * (re - rb) / (xem - xbm)  # proportion of the mass situated between the section
             xg += rm * (re + rb) / 2
-            yg += rm * list_masses[i][4]
-            zg += rm * list_masses[i][5]
+            yg += rm * list_masses[i].yg
+            zg += rm * list_masses[i].zg
             # print(masses[i][5])
     try:
         xg = xg / tm
@@ -326,7 +324,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     all_coord = correction_of_coordinates(all_coord)
     print_section(all_coord, 8.5)
     mass = mass_list(masses)  # list of the masses
-    graph_loading(mass, 0, 135)
+    graph_loading(mass, 0, 100)
     list_x = []  # initialization of the x coordinates of the sections
     f = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
     for coord in all_coord:
@@ -373,4 +371,4 @@ rx2 = calcul_rx2(coord, yg, zg)
 ry2 = calcul_ry2(coord, xg, zg)
 rz2 = calcul_rz2(coord, xg, yg)
 
-PD_strip_info_from_aft_to_for_mid_frame("masses_North_4layers_98.csv", "correct_frames_of_oural.asc")
+PD_strip_info_from_aft_to_for_mid_frame("masses1.csv", "barge_standaard_pias_text_file.txt")
