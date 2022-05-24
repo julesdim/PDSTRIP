@@ -75,7 +75,6 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
     plt.plot(les_x, moment_along_y)
     plt.title("Moment along y axis")
     plt.show()
-
     return
 
 
