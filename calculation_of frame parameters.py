@@ -337,21 +337,8 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     n_x = len(list_x)
     # for every section we have the backward and the forward
     for i in range(n_x - 1):
-        # if i == 0:
-        #    back = list_x[0]
-        #    #forward middle of the section
-        #    forw = (list_x[0] + list_x[1]) / 2
-        # #elif i == n_x - 2:
-        # #     forw = list_x[-1]
-        #      # backward the middle of the section
-        # #     back = (list_x[-1] + list_x[-2]) / 2
-        # else:
-        #     # forward and backward are the middle of the offset frames
-        #     forw = (list_x[i + 1]+list_x[i])/2
-        #     back = (list_x[i]+list_x[i-1])/2
         back = (list_x[i] + list_x[i + 1]) / 2
         forw = Lpp
-        # print(i)
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section
@@ -367,7 +354,6 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         xy = calcul_xy(list_coord, xg, yg)
         yz = calcul_yz(list_coord, yg, zg)
         xz = calcul_xz(list_coord, xg, zg)
-        # mass is divided by 1000 because PD strip unity is the ton instead of kg
         data = [m, xg, yg, zg, rx2, ry2, rz2, xy, yz, xz]
         for inf in data:
             # we write every input for the section
