@@ -69,14 +69,12 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
     #print(moment_along_x)
     print(moment_along_y)
     #print(moment_along_z)
-     plt.plot(les_x,forces_along_z)
+    plt.plot(les_x,forces_along_z)
     plt.title("Forces along Z axis")
     plt.show()
     plt.plot(les_x,moment_along_y)
-
     plt.title("Moment along y axis")
     plt.show()
-
     return
 
 
