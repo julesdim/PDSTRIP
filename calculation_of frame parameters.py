@@ -386,4 +386,5 @@ xg = 90.01621
 rx2 = calcul_rx2(coord, yg, zg)
 ry2 = calcul_ry2(coord, xg, zg)
 rz2 = calcul_rz2(coord, xg, yg)
+
 PD_strip_info_from_aft_to_for_mid_frame("masses_North_4layers_98.csv", "correct_frames_of_oural.asc")
