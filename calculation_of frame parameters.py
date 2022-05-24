@@ -100,8 +100,8 @@ def calcul_ry2(coord, xg, zg):
         z = coord[i][2]
         # we add the value to the sum
         sum += (x - xg) ** 2 + (z - zg) ** 2
-    # we calculate the average
-    # not necessary to calculate the mirror point because the coordinates are the same, it will not change the final value
+    # we calculate the average not necessary to calculate the mirror point because the coordinates are the same,
+    # it will not change the final value
     return sum / len(coord)
 
 
