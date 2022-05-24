@@ -308,7 +308,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         #     back = (list_x[i]+list_x[i-1])/2
         back = (list_x[i] + list_x[i + 1]) / 2
         forw = Lpp
-        print(forw)
+        print(i)
         list_coord = []  # initialization of the list of coordinates
         for coord in all_coord:
             # we append the coordinates situated in the section

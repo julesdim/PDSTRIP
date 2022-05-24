@@ -24,12 +24,15 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
         except IndexError:
             pass
         print(new)
-        if len(new)==0:
-            new=["error","error","error"]
+        if len(new) == 0:
+            new = ["error", "error", "error"]
         if new[0] == "wave" and new[2] == "frequency":
             ex_wave_frequency = float(new[3])
         if new[0] == "wave" and new[1] == "length":
-            ex_wave_length = float(new[2])
+            try:
+                ex_wave_length = float(new[2])
+            except:
+                ex_wave_length = 100000
         if new[0] == "wave" and new[1] == "angle":
             ex_wave_angle = float(new[2])
         if new[0] == "speed":
@@ -39,9 +42,9 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
         if ex_wave_length == wave_length and ex_wave_angle == wave_angle and ex_wave_frequency == wave_freq and ex_speed == speed:
             if new[0] == "Force":
                 x = float(new[1])
-                el_force_x = float(new[2])
-                el_force_y = float(new[5])
-                el_force_z = float(new[8])
+                el_force_x = float(new[4])
+                el_force_y = float(new[7])
+                el_force_z = float(new[10])
                 forces_along_x.append(el_force_x)
                 forces_along_y.append(el_force_y)
                 forces_along_z.append(el_force_z)
@@ -51,9 +54,9 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
                 break
             if new[0] == "Moment":
                 line_counter += 1
-                el_moment_x = float(new[1])
-                el_moment_y = float(new[4])
-                el_moment_z = float(new[7])
+                el_moment_x = float(new[3])
+                el_moment_y = float(new[6])
+                el_moment_z = float(new[9])
                 moment_along_x.append(el_moment_x)
                 moment_along_y.append(el_moment_y)
                 moment_along_z.append(el_moment_z)
@@ -76,4 +79,4 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok", 0.05, 24646.8, 135, 0)
+graph_file_for_one_wave("pdstrip.out.ok", 0.1, 6161.7, 0, 0)

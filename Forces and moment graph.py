@@ -44,7 +44,7 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
                 x = float(new[1])
                 #el_force_x = float(new[2])
                 #el_force_y = float(new[5])
-                el_force_z = float(new[8])
+                el_force_z = float(new[-1])
                 #forces_along_x.append(el_force_x)
                 #forces_along_y.append(el_force_y)
                 forces_along_z.append(el_force_z)
@@ -55,7 +55,10 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
             if new[0] == "Moment":
                 line_counter += 1
                 #el_moment_x = float(new[1])
-                el_moment_y = float(new[4])
+                try:
+                    el_moment_y = float(new[-4])
+                except :
+                    el_moment_y = float(new[-2])
                 #el_moment_z = float(new[7])
                 #moment_along_x.append(el_moment_x)
                 moment_along_y.append(el_moment_y)
@@ -70,6 +73,7 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
     plt.title("Forces along Z axis")
     plt.show()
     plt.plot(les_x,moment_along_y)
+
     plt.title("Moment along y axis")
     plt.show()
 
