@@ -144,8 +144,6 @@ class Form:
                 nb += 1
                 z = coord[1]
                 sum += (x - xg) * (z - zg)  # we add the value for the actual point
-        print(sum,"sum")
-        print(nb,"nb")
         return sum / nb
 
     def calcul_all(self,xb,xe,xg,yg,zg):

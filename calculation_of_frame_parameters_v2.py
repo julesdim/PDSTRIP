@@ -6,7 +6,7 @@ import shape as shape
 import numpy as np
 import frames as fr
 import loading as ld
-Lpp = 100
+Lpp = 135
 essai=ld.Loading()
 mass=truc.Mass(1,2,3,4,5,6,7,8)
 essai.__append__(mass)
@@ -30,7 +30,6 @@ def calculation_coord(filename):
     form = shape.Form()  # initialisation of the list of coordinates
     for line in the_lines:
         new = line[0].strip().split()  # formating the line
-        # print(new)
         if line_counter == 0:
             nb_f_tot = float(new[0])  # to know the number of frame
         if line_counter != 0 and len(new) == 1 and beg_frame:
@@ -65,7 +64,7 @@ def mass_list(masses):
     total_mass = 0  # to check the total mass
     for line in the_lines:
         line = line.strip("\n").split(";")  # we stop the line to the \n and we cut the information where there is a ";"
-        m = float(line[0]) / 1000  # the first info is the object mass
+        m = float(line[0])  # the first info is the object mass
         total_mass += m
         xb = float(line[1])  # the second is the beginning
         xe = float(line[2])  # the end
@@ -106,24 +105,6 @@ def mass_calculation(masses_list, xb, xe):
                 tm += (re - rb) * (mbr + mer) / 2
     return tm
 
-def graph_loading(list_mass, x_min, x_max):
-    """That function allow the user to print the weightloading, for a list of mass, and with the
-    boundaries of the ship"""
-    delt_x = 0.1  # value of the strip to calculate the ship loading
-    les_x = np.arange(x_min, x_max + delt_x, delt_x)  # coordinates of each strip
-    n = len(les_x)
-    mass_per_m = [0]  # we initialize the weight loading for x=0, it's equal to 0
-    for i in range(n - 1):
-        x_inf = les_x[i]
-        x_up = les_x[i + 1]
-        # coordinates of the strip i
-        el_mass = mass_calculation(list_mass, x_inf, x_up) / delt_x  # element of mass for the strip
-        mass_per_m.append(el_mass)  # we add to the list
-    plt.plot(les_x, mass_per_m)
-    plt.title("weight loading")
-    plt.show()
-    return
-
 def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     """The inputs are the masses, the loading of the ship as a csv file, explained in the function calcul_center_of_gravity,
     the second input is a coordinate file, with the Pias format.
@@ -132,23 +113,14 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     all_coord = calculation_coord(coord)  # list of the coordinates
     all_coord = all_coord.conversion_coordinate_to_pdstrip(Lpp/2)
     all_coord = all_coord.correction_of_coordinates()
-    #print_section(all_coord, 8.5)
     weightloading = mass_list(masses)  # list of the masses
     weightloading.pdstrip_coordinates(Lpp/2)
-    #graph_loading(weightloading, 0, 100)
+    weightloading.plot_loading(-135/2,135/2)
     f = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
-    list_x = all_coord.x_coordinates()
-    list_x.sort()  # we sort the info, maybe not already sorted
-    n_x = len(list_x)
     # for every section we have the backward and the forward
     for i in range (len(all_coord.shape)-1):
         back = (all_coord.shape[i].x+all_coord.shape[i+1].x)/2
         forw=correction(Lpp,Lpp/2)
-        list_coord=[]
-        # for frame in all_coord.shape:
-        #     if back<= frame.x<=forw:
-        #         list_coord.append(coord)
-        # # calculation of every information needed by PD strip code
         m = weightloading.mass_calculation(back,forw)
         try:
             xg,yg,zg=weightloading.calcul_center_of_gravity(back,forw)
@@ -160,11 +132,8 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
             # we write every input for the section
             f.write(str(inf) + " ")
         f.write("\n")
-        if i==0:
-            print (back,forw)
-            print(xg,yg,zg)
     f.close()
     # total mass is checked
     return
 
-PD_strip_info_from_aft_to_for_mid_frame("masses1.csv", "barge_standaard_pias_text_file.txt")
+PD_strip_info_from_aft_to_for_mid_frame("masses.csv", "correct_frames_of_oural.asc")
