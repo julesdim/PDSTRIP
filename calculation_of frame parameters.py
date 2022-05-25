@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import essai as xgcalc
 import masses as truc
+import shape as shape
+import frames as fr
 Lpp = 135
 
 
@@ -25,7 +27,7 @@ def calculation_coord(filename):
     y = 0
     z = 0
     les_z = []
-    coord = []  # initialisation of the list of coordinates
+    form = shape.Form()  # initialisation of the list of coordinates
     for line in the_lines:
         new = line[0].strip().split()  # formating the line
         # print(new)
@@ -33,18 +35,19 @@ def calculation_coord(filename):
             nb_f_tot = float(new[0])  # to know the number of frame
         if line_counter != 0 and len(new) == 1 and beg_frame:
             x = (float(new[0]))  # if there is just one coordinate, it is the position along x axis, if beg_frame==True
+            frame_act=fr.frames(x)
             beg_frame = False  # As we just passed the beg of the frame, next is false
         if line_counter != 0 and len(new) == 3:
             y = (float(new[0]))
             z = (float(new[1]))
+            frame_act.__append__((y,z))
             les_z.append(z)
             coord_act = (x, y, z)  # we get the coordinates of the actual point
-            coord.append((x, y, z))  # we append to the list
+            form.append(frame_act)  # we append to the list
             beg_frame = True  # the next time len(new)==1 it will be the beginning of a new frame
         line_counter += 1
     file.close()
-    print(les_z)
-    return coord
+    return form
 
 
 def correction_of_coordinates(list_coord):
@@ -69,7 +72,8 @@ def correction_of_coordinates(list_coord):
         max_y = max(y_fr)  # we save the max of y
         for coord2 in list_coord_fr:
             if coord2[2] < max_z and coord2[1] < max_y:
-                list_coord.append((coord2[0], coord2[1], max_z))  # we append a point at the same coordinates but at max_z
+                list_coord.append(
+                    (coord2[0], coord2[1], max_z))  # we append a point at the same coordinates but at max_z
     return list_coord
 
 
@@ -186,7 +190,7 @@ def mass_list(masses):
     total_mass = 0  # to check the total mass
     for line in the_lines:
         line = line.strip("\n").split(";")  # we stop the line to the \n and we cut the information where there is a ";"
-        m = float(line[0])/1000  # the first info is the object mass
+        m = float(line[0]) / 1000  # the first info is the object mass
         total_mass += m
         xb = float(line[1])  # the second is the beginning
         xe = float(line[2])  # the end
@@ -194,11 +198,11 @@ def mass_list(masses):
         yr = float(line[4])  # the turning radius
         z = float(line[5])  # the position along z axis of the center of gravity
         if xg != (xb - xe) / 2:
-            mb_per_meter, me_per_meter = xgcalc.calcul_xg_not_the_mid(m, xb, xe, xg, 0.1)
+            mb_per_meter, me_per_meter = xgcalc.calcul_xg_not_the_mid(m, xb, xe, xg, 0.00001)
         else:
-            me_per_meter=m/(xb-xe)
-            mb_per_meter=me_per_meter
-        mass=truc.Mass(m,xb,xe,xg,yr,z,mb_per_meter,me_per_meter)
+            me_per_meter = m / (xb - xe)
+            mb_per_meter = me_per_meter
+        mass = truc.Mass(m, xb, xe, xg, yr, z, mb_per_meter, me_per_meter)
         print(mass.mass)
         list_of_masses.append(mass)  # we append the current value
     print(total_mass, "tm")
@@ -234,20 +238,20 @@ def mass_calculation(masses_list, xb, xe):
     for i in range(n):
         m = masses_list[i].mass
         xbm = masses_list[i].xb  # beginning of the mass
-        xem = masses_list[i].xe # end of the mass
+        xem = masses_list[i].xe  # end of the mass
         xgm = masses_list[i].xg
-        mb=masses_list[i].mb_per_meter
-        me=masses_list[i].me_per_meter
+        mb = masses_list[i].mb_per_meter
+        me = masses_list[i].me_per_meter
         if xbm < xe and xem > xb:
             rb = np.max([xb, xbm])  # real beginning of the mass for the section
-            re = np.min([xe,xem])
+            re = np.min([xe, xem])
             mbr = mb + (rb - xbm) * (mb - me) / (xbm - xem)
-            mer=mb+(re-xbm)*(mb-me)/(xbm-xem)
+            mer = mb + (re - xbm) * (mb - me) / (xbm - xem)
             if xgm != (xbm - xem) / 2:
-                tm+=(re-rb)*(mbr+mer)/2
-            if xgm==(xbm - xem) / 2:
+                tm += (re - rb) * (mbr + mer) / 2
+            if xgm == (xbm - xem) / 2:
                 # real end of the mass for the section, if the end of the mass is after the end of the section
-                tm+=(re-rb)*(mbr+mer)/2
+                tm += (re - rb) * (mbr + mer) / 2
     return tm
 
 
@@ -359,7 +363,6 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         f.write("\n")
     f.close()
     # total mass is checked
-
     return
 
 
