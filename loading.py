@@ -7,7 +7,7 @@ class Loading:
     def plot_loading(self,xb,xe):
         """That function allow the user to print the weightloading, for a list of mass, and with the
             boundaries of the ship"""
-        delt_x = 0.001  # value of the strip to calculate the ship loading
+        delt_x = 0.1  # value of the strip to calculate the ship loading
         les_x = np.arange(xb, xe + delt_x, delt_x)  # coordinates of each strip
         n = len(les_x)
         mass_per_m = [0]  # we initialize the weight loading for x=0, it's equal to 0
@@ -63,7 +63,10 @@ class Loading:
                 re = np.min([xe, xem])
                 mb,me=self.masses[i].calcul_mass2(rb,re)
                 rm = (re - rb)*(mb+me)/2 # proportion of the mass situated between the section
-                xg=self.masses[i].calcul_xg2(rb,re)
+                if mb !=0 and me!=0:
+                    xg=self.masses[i].calcul_xg2(rb,re)
+                else:
+                    xg=0
                 xg += rm * xg
                 yg += rm * self.masses[i].yg
                 zg += rm * self.masses[i].zg

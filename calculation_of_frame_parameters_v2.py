@@ -7,9 +7,6 @@ import numpy as np
 import frames as fr
 import loading as ld
 Lpp = 135
-essai=ld.Loading()
-mass=truc.Mass(1,2,3,4,5,6,7,8)
-essai.__append__(mass)
 
 def correction(x,midship):
     return x-midship
@@ -71,13 +68,14 @@ def mass_list(masses):
         xg = float(line[3])  # the exact center of gravity
         yr = float(line[4])  # the turning radius
         z = float(line[5])  # the position along z axis of the center of gravity
-        if xg != (xb - xe) / 2:
-            mb_per_meter, me_per_meter = xgcalc.calcul_xg_not_the_mid(m, xb, xe, xg, 0.00001)
-        else:
+        if xg != (xb - xe) / 2 and m!=0:
+                mb_per_meter, me_per_meter = xgcalc.calcul_xg_not_the_mid(m, xb, xe, xg, 0.00001)
+        elif m!=0:
             me_per_meter = m / (xb - xe)
             mb_per_meter = me_per_meter
-        mass = truc.Mass(m, xb, xe, xg, yr, z, mb_per_meter, me_per_meter)
-        list_of_masses.__append__(mass)  # we append the current value
+        if m!=0:
+            mass = truc.Mass(m, xb, xe, xg, yr, z, mb_per_meter, me_per_meter)
+            list_of_masses.__append__(mass)  # we append the current value
     return list_of_masses
 
 def mass_calculation(masses_list, xb, xe):

@@ -36,6 +36,9 @@ class Mass:
         for i in range(len(les_x)):
             s += les_x[i] * les_y[i]
             s_y += les_y[i]
+        if s_y==0:
+            print(les_x)
+            print(les_y)
         return s / s_y
 
     def calcul_mass(self):
