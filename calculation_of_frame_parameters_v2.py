@@ -113,7 +113,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     all_coord = all_coord.correction_of_coordinates()
     weightloading = mass_list(masses)  # list of the masses
     weightloading.pdstrip_coordinates(Lpp/2)
-    weightloading.plot_loading(-135/2,135/2)
+    weightloading.plot_loading(-50,50)
     f = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
     # for every section we have the backward and the forward
     for i in range (len(all_coord.shape)-1):
@@ -125,7 +125,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
         except ZeroDivisionError:
             xg,yg,zg=all_coord.center_of_gravity_no_mass(back,forw)
         rx2,ry2,rz2,xy,yz,xz = all_coord.calcul_all(back,forw,xg,yg,zg)
-        data = [m, xg, yg, zg, rx2, ry2, rz2, xy, yz, xz]
+        data = [m, xg, yg, -zg, rx2, ry2, rz2, xy, yz, xz]
         for inf in data:
             # we write every input for the section
             f.write(str(inf) + " ")
