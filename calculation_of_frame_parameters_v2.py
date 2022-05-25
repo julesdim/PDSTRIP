@@ -134,34 +134,35 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
     all_coord = all_coord.correction_of_coordinates()
     #print_section(all_coord, 8.5)
     weightloading = mass_list(masses)  # list of the masses
+    weightloading.pdstrip_coordinates(Lpp/2)
     #graph_loading(weightloading, 0, 100)
     f = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
     list_x = all_coord.x_coordinates()
-    print(list_x)
     list_x.sort()  # we sort the info, maybe not already sorted
-    print(list_x)
     n_x = len(list_x)
     # for every section we have the backward and the forward
     for i in range (len(all_coord.shape)-1):
         back = (all_coord.shape[i].x+all_coord.shape[i+1].x)/2
-        print(back,"back")
-        forw=Lpp
+        forw=correction(Lpp,Lpp/2)
         list_coord=[]
         # for frame in all_coord.shape:
         #     if back<= frame.x<=forw:
         #         list_coord.append(coord)
         # # calculation of every information needed by PD strip code
         m = weightloading.mass_calculation(back,forw)
-        print(m)
-        xg,yg,zg=weightloading.calcul_center_of_gravity(back,forw)
-        xg=correction(xg,Lpp/2)
-        print(xg,yg,zg)
+        try:
+            xg,yg,zg=weightloading.calcul_center_of_gravity(back,forw)
+        except ZeroDivisionError:
+            xg,yg,zg=all_coord.center_of_gravity_no_mass(back,forw)
         rx2,ry2,rz2,xy,yz,xz = all_coord.calcul_all(back,forw,xg,yg,zg)
         data = [m, xg, yg, zg, rx2, ry2, rz2, xy, yz, xz]
         for inf in data:
             # we write every input for the section
             f.write(str(inf) + " ")
         f.write("\n")
+        if i==0:
+            print (back,forw)
+            print(xg,yg,zg)
     f.close()
     # total mass is checked
     return

@@ -1,9 +1,22 @@
+import numpy as np
 class Form:
     def __init__(self):
         self.shape=[]
 
     def __append__(self,frame):
         self.shape.append(frame)
+
+    def center_of_gravity_no_mass(self,xb,xe):
+        les_y=[]
+        les_z=[]
+        for frame in self.shape:
+            if frame.x<=xe and frame.x>=xb:
+                xg=(xb+xe)/2
+                for coord in frame.coords:
+                    les_y.append(coord[0])
+                    les_y.append(-coord[0])
+                    les_z.append(coord[1])
+        return xg,np.mean(les_y),np.mean(les_z)
 
     def correction_of_coordinates(self):
         n=len(self.shape)

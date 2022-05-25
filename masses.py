@@ -26,6 +26,18 @@ class Mass:
             s_y += les_y[i]
         return s / s_y
 
+    def calcul_xg2(self,xb,xe):
+        mxb = self.mb_per_meter
+        mxe = self.me_per_meter
+        les_x = np.arange(xb, xe + 0.01, 0.01)
+        les_y = (mxe - mxb) / (xe - xb) * (les_x - xb) + mxb
+        s = 0
+        s_y = 0
+        for i in range(len(les_x)):
+            s += les_x[i] * les_y[i]
+            s_y += les_y[i]
+        return s / s_y
+
     def calcul_mass(self):
         xe = self.xe
         xb = self.xb
