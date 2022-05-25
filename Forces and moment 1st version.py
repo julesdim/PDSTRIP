@@ -41,7 +41,7 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
             number_of_section = float(new[3])
         if ex_wave_length == wave_length and ex_wave_angle == wave_angle and ex_wave_frequency == wave_freq and ex_speed == speed:
             if new[0] == "Force":
-                x = float(new[1])
+                x = float(new[1])+50
                 el_force_x = float(new[2])
                 el_force_y = float(new[5])
                 el_force_z = float(new[8])
