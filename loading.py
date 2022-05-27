@@ -42,11 +42,13 @@ class Loading:
                 re = np.min([xe, xem])
                 mbr = mb + (rb - xbm) * (me - mb) / (xem - xbm)
                 mer = mb + (re - xbm) * (me - mb) / (xem - xbm)
-                if xgm != (xbm - xem) / 2:
+                if xgm != (xbm + xem) / 2:
                     tm += (re - rb) * (mbr + mer) / 2
-                if xgm == (xbm - xem) / 2:
+                if xgm == (xbm + xem) / 2:
                     # real end of the mass for the section, if the end of the mass is after the end of the section
-                    tm += (re - rb) * (mbr + mer) / 2
+                    if mbr!=mer:
+                        print("strange")
+                    tm += (re - rb) * mbr
         return tm
 
     def calcul_center_of_gravity(self, xb, xe):

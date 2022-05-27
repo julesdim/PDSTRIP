@@ -1,5 +1,4 @@
 import csv
-import matplotlib.pyplot as plt
 import essai as xgcalc
 import masses as truc
 import shape as shape
@@ -37,7 +36,7 @@ def calculation_coord(filename):
             beg_frame = False  # As we just passed the beg of the frame, next is false
         if line_counter != 0 and len(new) == 3:
             y = (float(new[0]))
-            z = (float(new[1]))
+            z = (-float(new[1]))
             frame_act.__append__((y, z))
             les_z.append(z)
             coord_act = (x, y, z)  # we get the coordinates of the actual point
@@ -70,41 +69,15 @@ def mass_list(masses):
         xg = float(line[3])  # the exact center of gravity
         yr = float(line[4])  # the turning radius
         z = float(line[5])  # the position along z axis of the center of gravity
-        if xg != (xb - xe) / 2 and m != 0:
+        if xg != (xb + xe) / 2 and m != 0:
             mb_per_meter, me_per_meter = xgcalc.calcul_xg_not_the_mid(m, xb, xe, xg, 0.00001)
-        elif m != 0:
+        elif m != 0 and xg == (xb+xe)/2:
             me_per_meter = m / (xb - xe)
             mb_per_meter = me_per_meter
         if m != 0:
             mass = truc.Mass(m, xb, xe, xg, yr, z, mb_per_meter, me_per_meter)
             list_of_masses.__append__(mass)  # we append the current value
     return list_of_masses
-
-
-def mass_calculation(masses_list, xb, xe):
-    """The inputs are the list of the masses in the ship, and the beginning of the frame where we want to calculate the center
-    of gravity, along the x-axis, xb and xe.
-    It returns the total mass in that section"""
-    n = len(masses_list.masses)
-    tm = 0
-    for i in range(n):
-        m = masses_list[i].mass
-        xbm = masses_list[i].xb  # beginning of the mass
-        xem = masses_list[i].xe  # end of the mass
-        xgm = masses_list[i].xg
-        mb = masses_list[i].mb_per_meter
-        me = masses_list[i].me_per_meter
-        if xbm < xe and xem > xb:
-            rb = np.max([xb, xbm])  # real beginning of the mass for the section
-            re = np.min([xe, xem])
-            mbr = mb + (rb - xbm) * (mb - me) / (xbm - xem)
-            mer = mb + (re - xbm) * (mb - me) / (xbm - xem)
-            if xgm != (xbm - xem) / 2:
-                tm += (re - rb) * (mbr + mer) / 2
-            if xgm == (xbm - xem) / 2:
-                # real end of the mass for the section, if the end of the mass is after the end of the section
-                tm += (re - rb) * (mbr + mer) / 2
-    return tm
 
 
 def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
@@ -139,4 +112,4 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
     return
 
 
-PD_strip_info_from_aft_to_for_mid_frame("masses.csv", "correct_frames_of_oural.asc", 135)
+PD_strip_info_from_aft_to_for_mid_frame("masses1.csv", "barge_standaard_pias_text_file.txt", 100)

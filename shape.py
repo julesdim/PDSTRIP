@@ -31,18 +31,16 @@ class Form:
             for i in range(n_coord):
                 z_fr.append(coords[i][1])
                 y_fr.append(coords[i][0])
-            max_z = max(z_fr)  # we save the max of z
+            max_z = min(z_fr)# we save the max of z in pd strip coordiates, that means z to the ground
             max_y = max(y_fr)
             for coord in coords:
-                if coord[1] < max_z and coord[0] < max_y:
+                if coord[1] > max_z and coord[0] < max_y:
                     self.shape[j].__append__((coord[0], max_z))
         return self
 
     def conversion_coordinate_to_pdstrip(self, midship):
         for frame in self.shape:
             frame.x = frame.x - midship
-            for coord in frame.coords:
-                coord=(coord[0],-coord[1])
         return self
 
     def x_coordinates(self):
