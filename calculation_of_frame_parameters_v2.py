@@ -8,6 +8,7 @@ import loading as ld
 def correction(x, midship):
     return x - midship
 
+
 def calculation_coord(filename):
     """The Pias file of coordinates is the input, and it returns a list of the coordinates as tuple
     [(x1,y1,z1),(...),...]"""
@@ -19,7 +20,7 @@ def calculation_coord(filename):
     beg_frame = True  # we can know if we are at the beginning of the frame to get the x coordinate of the frame
     form = shape.Form()  # initialisation of the list of coordinates
     for line in the_lines:
-        new = line[0].strip().split()# formating the line
+        new = line[0].strip().split()  # formating the line
         if line_counter == 0:
             nb_f_tot = float(new[0])  # to know the number of frame
         if line_counter != 0 and len(new) == 1 and beg_frame:
@@ -31,8 +32,8 @@ def calculation_coord(filename):
             y = (float(new[0]))
             z = (-float(new[1]))
             frame_act.__append__((y, z))  # we append to the list
-            if y!=0:
-                frame_act.__append__((-y,z))
+            if y != 0:
+                frame_act.__append__((-y, z))
             beg_frame = True  # the next time len(new)==1 it will be the beginning of a new frame
         if len(new) == 1 and line_counter == line_deb_frame + 1:
             nb_points = int(new[0])
@@ -99,7 +100,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
             # we write every input for the section
             f.write(str(inf) + " ")
         f.write("\n")
-    f.close()# total mass is checked
+    f.close()  # total mass is checked
     return
 
 
@@ -107,4 +108,4 @@ masses1 = "masses1.csv"
 shape1 = "barge_standaard_pias_text_file.txt"
 masses2 = "masses.csv"
 shape2 = "correct_frames_of_oural.asc"
-PD_strip_info_from_aft_to_for_mid_frame(masses1, shape1, 100)
+PD_strip_info_from_aft_to_for_mid_frame(masses2, shape2, 135)
