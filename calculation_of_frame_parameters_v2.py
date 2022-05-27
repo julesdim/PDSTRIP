@@ -108,4 +108,4 @@ masses1 = "masses1.csv"
 shape1 = "barge_standaard_pias_text_file.txt"
 masses2 = "masses.csv"
 shape2 = "correct_frames_of_oural.asc"
-PD_strip_info_from_aft_to_for_mid_frame(masses2, shape2, 135)
+PD_strip_info_from_aft_to_for_mid_frame(masses1, shape1, 100)
