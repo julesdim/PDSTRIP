@@ -2,7 +2,13 @@ import matplotlib.pyplot as plt
 import csv
 
 
-def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed):
+def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed,txt):
+    if txt=="real":
+        const=0
+    elif txt=="im":
+        const=1
+    elif txt=="abs":
+        const=2
     file = open(filename, "r", encoding="utf-8")
     the_lines = csv.reader(file)
     line_counter = 0
@@ -42,9 +48,9 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
         if ex_wave_length == wave_length and ex_wave_angle == wave_angle and ex_wave_frequency == wave_freq and ex_speed == speed:
             if new[0] == "Force":
                 x = float(new[1])
-                el_force_x = float(new[2])
-                el_force_y = float(new[5])
-                el_force_z = float(new[8])
+                el_force_x = float(new[2+const])
+                el_force_y = float(new[5+const])
+                el_force_z = float(new[8+const])
                 forces_along_x.append(el_force_x)
                 forces_along_y.append(el_force_y)
                 forces_along_z.append(el_force_z)
@@ -54,9 +60,9 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
                 break
             if new[0] == "Moment":
                 line_counter += 1
-                el_moment_x = float(new[1])
-                el_moment_y = float(new[4])
-                el_moment_z = float(new[7])
+                el_moment_x = float(new[1+const])
+                el_moment_y = float(new[4+const])
+                el_moment_z = float(new[7+const])
                 moment_along_x.append(el_moment_x)
                 moment_along_y.append(el_moment_y)
                 moment_along_z.append(el_moment_z)
@@ -72,11 +78,11 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed)
     for i in range(n_all_el):
         plt.plot(les_x, all_el[i])
         if i <= 2:
-            plt.title("Forces along " + list_title[i] + " axis")
+            plt.title("Forces along " + list_title[i] + " axis" + " "+ txt)
         if i > 2:
-            plt.title("Moment along " + list_title[i - 3] + " axis")
+            plt.title("Moment along " + list_title[i - 3] + " axis"+ " "+txt)
         plt.show()
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok", 0.2, 1540.43, 0, 0)
+graph_file_for_one_wave("pdstrip.out.ok", 0.2, 1540.43, 0, 0,"abs")
