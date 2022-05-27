@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
+
 class Loading:
     def __init__(self):
-        self.masses=[]
+        self.masses = []
 
-    def plot_loading(self,xb,xe):
+    def plot_loading(self, xb, xe):
         """That function allow the user to print the weightloading, for a list of mass, and with the
             boundaries of the ship"""
         delt_x = 0.1  # value of the strip to calculate the ship loading
@@ -22,19 +24,19 @@ class Loading:
         plt.show()
         return
 
-    def __append__(self,mass):
+    def __append__(self, mass):
         self.masses.append(mass)
 
-    def mass_calculation(self,xb,xe):
-        n=len(self.masses)
-        tm=0
-        for i in range (n):
-            m=self.masses[i].mass
-            xbm=self.masses[i].xb
-            xem=self.masses[i].xe
-            xgm=self.masses[i].xg
-            mb=self.masses[i].mb_per_meter
-            me=self.masses[i].me_per_meter
+    def mass_calculation(self, xb, xe):
+        n = len(self.masses)
+        tm = 0
+        for i in range(n):
+            m = self.masses[i].mass
+            xbm = self.masses[i].xb
+            xem = self.masses[i].xe
+            xgm = self.masses[i].xg
+            mb = self.masses[i].mb_per_meter
+            me = self.masses[i].me_per_meter
             if xbm < xe and xem > xb:
                 rb = np.max([xb, xbm])  # real beginning of the mass for the section
                 re = np.min([xe, xem])
@@ -47,8 +49,8 @@ class Loading:
                     tm += (re - rb) * (mbr + mer) / 2
         return tm
 
-    def calcul_center_of_gravity(self,xb,xe):
-        tm=self.mass_calculation(xb,xe)
+    def calcul_center_of_gravity(self, xb, xe):
+        tm = self.mass_calculation(xb, xe)
         n = len(self.masses)
         # initialization of the values
         xg = 0
@@ -61,19 +63,20 @@ class Loading:
             if xbm < xe and xem > xb:
                 rb = np.max([xb, xbm])  # real beginning of the mass, if the mass begins before the frame
                 re = np.min([xe, xem])
-                mb,me=self.masses[i].calcul_mass2(rb,re)
-                rm = (re - rb)*(mb+me)/2 # proportion of the mass situated between the section
-                if mb !=0 and me!=0:
-                    xg=self.masses[i].calcul_xg2(rb,re)
+                mb, me = self.masses[i].calcul_mass2(rb, re)
+                rm = (re - rb) * (mb + me) / 2  # proportion of the mass situated between the section
+                if mb != 0 and me != 0:
+                    xg = self.masses[i].calcul_xg2(rb, re)
                 else:
-                    xg=0
+                    xg = 0
                 xg += rm * xg
                 yg += rm * self.masses[i].yg
                 zg += rm * self.masses[i].zg
-        return (xg/tm,yg/tm,zg/tm)
+        return (xg / tm, yg / tm, zg / tm)
 
-    def pdstrip_coordinates (self,midship):
+    def pdstrip_coordinates(self, midship):
         for mass in self.masses:
-            mass.xb=mass.xb-midship
-            mass.xe=mass.xe-midship
-            mass.xg=mass.xg-midship
+            mass.xb = mass.xb - midship
+            mass.xe = mass.xe - midship
+            mass.xg = mass.xg - midship
+            mass.zg = -mass.zg
