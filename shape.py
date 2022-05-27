@@ -1,5 +1,6 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 class Form:
     def __init__(self):
@@ -160,3 +161,32 @@ class Form:
         yz = list_frame.calcul_yz(yg, zg)
         xz = list_frame.calcul_xz(xg, zg)
         return rx2, ry2, rz2, xy, yz, xz
+
+    def plotting(self):
+        les_x=[]
+        les_y=[]
+        les_z=[]
+        for frame in self.shape:
+            x=frame.x
+            for coord in frame.coords:
+                y=coord[0]
+                z=-coord[1]
+                les_x.append(x)
+                les_y.append(y)
+                les_z.append(z)
+            for coord in frame.coords:
+                y = -coord[0]
+                z = -coord[1]
+                les_x.append(x)
+                les_y.append(y)
+                les_z.append(z)
+        les_z=np.array(les_z)
+        les_y=np.array(les_y)
+        les_x=np.array(les_x)
+        fig = plt.figure()
+        ax=fig.gca(projection="3d")
+        ax.scatter(les_x,les_y,les_z,label="courbe",marker='d')
+        ax.set_title('test')
+        plt.tight_layout()
+        plt.show()
+        return

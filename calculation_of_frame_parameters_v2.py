@@ -72,7 +72,7 @@ def mass_list(masses):
         if xg != (xb + xe) / 2 and m != 0:
             mb_per_meter, me_per_meter = xgcalc.calcul_xg_not_the_mid(m, xb, xe, xg, 0.00001)
         elif m != 0 and xg == (xb+xe)/2:
-            me_per_meter = m / (xb - xe)
+            me_per_meter = m / (xe - xb)
             mb_per_meter = me_per_meter
         if m != 0:
             mass = truc.Mass(m, xb, xe, xg, yr, z, mb_per_meter, me_per_meter)
@@ -88,6 +88,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
     all_coord = calculation_coord(coord)  # list of the coordinates
     all_coord = all_coord.conversion_coordinate_to_pdstrip(Lpp / 2)
     all_coord = all_coord.correction_of_coordinates()
+    all_coord.plotting()
     weightloading = mass_list(masses)  # list of the masses
     weightloading.pdstrip_coordinates(Lpp / 2)
     weightloading.plot_loading(-Lpp / 2, Lpp / 2)
@@ -112,4 +113,8 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
     return
 
 
-PD_strip_info_from_aft_to_for_mid_frame("masses1.csv", "barge_standaard_pias_text_file.txt", 100)
+masses1="masses1.csv"
+shape1="barge_standaard_pias_text_file.txt"
+masses2="masses.csv"
+shape2="correct_frames_of_oural.asc"
+PD_strip_info_from_aft_to_for_mid_frame(masses1,shape1, 100)
