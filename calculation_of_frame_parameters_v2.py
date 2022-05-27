@@ -8,7 +8,6 @@ import loading as ld
 def correction(x, midship):
     return x - midship
 
-
 def calculation_coord(filename):
     """The Pias file of coordinates is the input, and it returns a list of the coordinates as tuple
     [(x1,y1,z1),(...),...]"""
@@ -96,8 +95,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
             # we write every input for the section
             f.write(str(inf) + " ")
         f.write("\n")
-    f.close()
-    # total mass is checked
+    f.close()# total mass is checked
     return
 
 
