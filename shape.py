@@ -17,7 +17,6 @@ class Form:
                 xg = (xb + xe) / 2
                 for coord in frame.coords:
                     les_y.append(coord[0])
-                    les_y.append(-coord[0])
                     les_z.append(coord[1])
         return xg, np.mean(les_y), np.mean(les_z)
 
@@ -34,7 +33,7 @@ class Form:
             max_z = min(z_fr)  # we save the max of z in pd strip coordinates, that means z to the ground
             max_y = max(y_fr)
             for coord in coords:
-                if coord[1] > max_z and coord[0] < max_y:
+                if coord[1] > max_z and abs(coord[0]) < max_y:
                     self.shape[j].__append__((coord[0], max_z))
         return self
 
@@ -60,13 +59,6 @@ class Form:
                 z = coord[1]
                 y = coord[0]
                 sum += (y - yg) ** 2 + (z - zg) ** 2  # we add the value for the actual point
-            for coord in frame.coords:
-                # we do the same thing for the mirror points
-                nb += 1
-                y = -coord[0]
-                z = coord[1]
-                sum += (y - yg) ** 2 + (z - zg) ** 2
-        # we return an average
         return sum / nb
 
     def calcul_ry2(self, xg, zg):
@@ -92,12 +84,6 @@ class Form:
                 nb += 1
                 y = coord[0]
                 sum += (x - xg) ** 2 + (y - yg) ** 2  # we add the value for the actual point
-            for coord in frame.coords:
-                # we do the same thing for the mirror points
-                nb += 1
-                y = -coord[0]
-                sum += (x - xg) ** 2 + (y - yg) ** 2
-        # we return an average
         return sum / nb
 
     def calcul_xy(self, xg, yg):
@@ -111,12 +97,6 @@ class Form:
                 nb += 1
                 y = coord[0]
                 sum += (x - xg) * (y - yg)  # we add the value for the actual point
-            for coord in frame.coords:
-                # we do the same thing for the mirror points
-                nb += 1
-                y = -coord[0]
-                sum += (x - xg) * (y - yg)
-        # we return an average
         return sum / nb
 
     def calcul_yz(self, yg, zg):
@@ -128,13 +108,6 @@ class Form:
                 y = coord[0]
                 z = coord[1]
                 sum += (y - yg) * (z - zg)  # we add the value for the actual point
-            for coord in frame.coords:
-                # we do the same thing for the mirror points
-                nb += 1
-                y = -coord[0]
-                z = coord[1]
-                sum += (y - yg) * (z - zg)
-        # we return an average
         return sum / nb
 
     def calcul_xz(self, xg, zg):
@@ -173,12 +146,6 @@ class Form:
                 les_x.append(x)
                 les_y.append(y)
                 les_z.append(z)
-            for coord in frame.coords:
-                y = -coord[0]
-                z = -coord[1]
-                les_x.append(x)
-                les_y.append(y)
-                les_z.append(z)
         les_z = np.array(les_z)
         les_y = np.array(les_y)
         les_x = np.array(les_x)
@@ -189,3 +156,21 @@ class Form:
         plt.tight_layout()
         plt.show()
         return
+
+    def plot_one_frame(self, x):
+        les_x = []
+        les_y = []
+        for frame in self.shape:
+            if frame.x == x:
+                for coord in frame.coords:
+                    les_x.append(coord[0])
+                    les_y.append(coord[1])
+        plt.plot(les_x, les_y)
+        plt.show()
+
+    def checking(self):
+        for frame in self.shape:
+            for i in range(len(frame.coords)):
+                for j in range(len(frame.coords)):
+                    if frame.coords[i][0] == frame.coords[j][0] and frame.coords[i][1] == frame.coords[j][1] and i != j:
+                        print("pb")

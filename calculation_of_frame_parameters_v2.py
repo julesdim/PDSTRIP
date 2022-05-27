@@ -19,7 +19,7 @@ def calculation_coord(filename):
     beg_frame = True  # we can know if we are at the beginning of the frame to get the x coordinate of the frame
     form = shape.Form()  # initialisation of the list of coordinates
     for line in the_lines:
-        new = line[0].strip().split()  # formating the line
+        new = line[0].strip().split()# formating the line
         if line_counter == 0:
             nb_f_tot = float(new[0])  # to know the number of frame
         if line_counter != 0 and len(new) == 1 and beg_frame:
@@ -31,6 +31,8 @@ def calculation_coord(filename):
             y = (float(new[0]))
             z = (-float(new[1]))
             frame_act.__append__((y, z))  # we append to the list
+            if y!=0:
+                frame_act.__append__((-y,z))
             beg_frame = True  # the next time len(new)==1 it will be the beginning of a new frame
         if len(new) == 1 and line_counter == line_deb_frame + 1:
             nb_points = int(new[0])
@@ -75,6 +77,8 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
     all_coord = calculation_coord(coord)  # list of the coordinates
     all_coord = all_coord.conversion_coordinate_to_pdstrip(Lpp / 2)
     all_coord = all_coord.correction_of_coordinates()
+    all_coord.checking()
+    all_coord.plot_one_frame(0)
     all_coord.plotting()
     weightloading = mass_list(masses)  # list of the masses
     weightloading.pdstrip_coordinates(Lpp / 2)
@@ -103,4 +107,4 @@ masses1 = "masses1.csv"
 shape1 = "barge_standaard_pias_text_file.txt"
 masses2 = "masses.csv"
 shape2 = "correct_frames_of_oural.asc"
-PD_strip_info_from_aft_to_for_mid_frame(masses2, shape2, 135)
+PD_strip_info_from_aft_to_for_mid_frame(masses1, shape1, 100)
