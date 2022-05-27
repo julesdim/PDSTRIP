@@ -31,7 +31,6 @@ class Loading:
         n = len(self.masses)
         tm = 0
         for i in range(n):
-            m = self.masses[i].mass
             xbm = self.masses[i].xb
             xem = self.masses[i].xe
             xgm = self.masses[i].xg
@@ -46,8 +45,6 @@ class Loading:
                     tm += (re - rb) * (mbr +mer) / 2
                 if xgm == (xbm + xem) / 2:
                     # real end of the mass for the section, if the end of the mass is after the end of the section
-                    if mbr!=mer:
-                        print("strange")
                     tm += (re - rb) * mbr
         return tm
 
@@ -59,7 +56,6 @@ class Loading:
         yg = 0
         zg = 0
         for i in range(n):
-            m = self.masses[i].mass
             xbm = self.masses[i].xb  # beginning of the mass
             xem = self.masses[i].xe  # end of the mass
             if xbm < xe and xem > xb:
@@ -74,7 +70,7 @@ class Loading:
                 xg += rm * xg
                 yg += rm * self.masses[i].yg
                 zg += rm * self.masses[i].zg
-        return (xg / tm, yg / tm, zg / tm)
+        return xg / tm, yg / tm, zg / tm
 
     def pdstrip_coordinates(self, midship):
         for mass in self.masses:

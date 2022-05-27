@@ -1,8 +1,6 @@
 import csv
-import essai as xgcalc
 import masses as truc
 import shape as shape
-import numpy as np
 import frames as fr
 import loading as ld
 
@@ -20,10 +18,6 @@ def calculation_coord(filename):
     line_deb_frame = 0
     line_end = 1000
     beg_frame = True  # we can know if we are at the beginning of the frame to get the x coordinate of the frame
-    x = 0  # initialisation of coordinates
-    y = 0
-    z = 0
-    les_z = []
     form = shape.Form()  # initialisation of the list of coordinates
     for line in the_lines:
         new = line[0].strip().split()  # formating the line
@@ -37,10 +31,7 @@ def calculation_coord(filename):
         if line_counter != 0 and len(new) == 3:
             y = (float(new[0]))
             z = (-float(new[1]))
-            frame_act.__append__((y, z))
-            les_z.append(z)
-            coord_act = (x, y, z)  # we get the coordinates of the actual point
-            # we append to the list
+            frame_act.__append__((y, z))  # we append to the list
             beg_frame = True  # the next time len(new)==1 it will be the beginning of a new frame
         if len(new) == 1 and line_counter == line_deb_frame + 1:
             nb_points = int(new[0])
@@ -53,9 +44,9 @@ def calculation_coord(filename):
 
 
 def mass_list(masses):
-    """the input is a csv file with all the masses with the beginning of the mass along the x axis and the ending of this mass
-    there is the center of gravity of this mass, the turning radius and finally the position of the centyer of gravity along
-    z axis from the Free surface, it returns the sames informations but with a list of that masses """
+    """the input is a csv file with all the masses with the beginning of the mass along the x axis and the ending of
+    this mass there is the center of gravity of this mass, the turning radius and finally the position of the centyer
+    of gravity along z axis from the Free surface, it returns the sames informations but with a list of that masses """
     fichier = open(masses, "rt")
     list_of_masses = ld.Loading()  # initialisation of the list of masses
     the_lines = fichier.readlines()
@@ -69,22 +60,19 @@ def mass_list(masses):
         xg = float(line[3])  # the exact center of gravity
         yr = float(line[4])  # the turning radius
         z = float(line[5])  # the position along z axis of the center of gravity
-        if xg != (xb + xe) / 2 and m != 0:
-            mb_per_meter, me_per_meter = xgcalc.calcul_xg_not_the_mid(m, xb, xe, xg, 0.00001)
-        elif m != 0 and xg == (xb+xe)/2:
-            me_per_meter = m / (xe - xb)
-            mb_per_meter = me_per_meter
+        mb_per_meter, me_per_meter = m / (xe - xb), m / (xe - xb)
         if m != 0:
             mass = truc.Mass(m, xb, xe, xg, yr, z, mb_per_meter, me_per_meter)
-            list_of_masses.__append__(mass)  # we append the current value
+            if xg != (xb + xe) / 2:
+                mass.calcul_xg_not_the_mid()
+            list_of_masses.__append__(mass)
     return list_of_masses
 
 
 def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
-    """The inputs are the masses, the loading of the ship as a csv file, explained in the function calcul_center_of_gravity,
-    the second input is a coordinate file, with the Pias format.
-    It returns a csv file with all the information needed for a PD strip input file for a bending moment and shear forces
-    computation"""
+    """The inputs are the masses, the loading of the ship as a csv file, explained in the function
+    calcul_center_of_gravity, the second input is a coordinate file, with the Pias format. It returns a csv file with
+    all the information needed for a PD strip input file for a bending moment and shear forces computation """
     all_coord = calculation_coord(coord)  # list of the coordinates
     all_coord = all_coord.conversion_coordinate_to_pdstrip(Lpp / 2)
     all_coord = all_coord.correction_of_coordinates()
@@ -113,8 +101,8 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord, Lpp):
     return
 
 
-masses1="masses1.csv"
-shape1="barge_standaard_pias_text_file.txt"
-masses2="masses.csv"
-shape2="correct_frames_of_oural.asc"
-PD_strip_info_from_aft_to_for_mid_frame(masses1,shape1, 100)
+masses1 = "masses1.csv"
+shape1 = "barge_standaard_pias_text_file.txt"
+masses2 = "masses.csv"
+shape2 = "correct_frames_of_oural.asc"
+PD_strip_info_from_aft_to_for_mid_frame(masses2, shape2, 135)

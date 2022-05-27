@@ -17,4 +17,3 @@ class Frames:
             les_y.append(coord[1])
         plt.plot(les_x, les_y)
         plt.show()
-

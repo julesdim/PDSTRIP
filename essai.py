@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def calcul_xg(xb, xe, mxb, mxe):

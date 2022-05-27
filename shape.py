@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
+
 
 class Form:
     def __init__(self):
@@ -13,7 +13,7 @@ class Form:
         les_y = []
         les_z = []
         for frame in self.shape:
-            if frame.x <= xe and frame.x >= xb:
+            if xe >= frame.x >= xb:
                 xg = (xb + xe) / 2
                 for coord in frame.coords:
                     les_y.append(coord[0])
@@ -24,7 +24,6 @@ class Form:
     def correction_of_coordinates(self):
         n = len(self.shape)
         for j in range(n):
-            x = self.shape[j].x
             z_fr = []  # all the z of the frame
             y_fr = []
             coords = self.shape[j].coords
@@ -32,7 +31,7 @@ class Form:
             for i in range(n_coord):
                 z_fr.append(coords[i][1])
                 y_fr.append(coords[i][0])
-            max_z = min(z_fr)# we save the max of z in pd strip coordiates, that means z to the ground
+            max_z = min(z_fr)  # we save the max of z in pd strip coordinates, that means z to the ground
             max_y = max(y_fr)
             for coord in coords:
                 if coord[1] > max_z and coord[0] < max_y:
@@ -48,7 +47,7 @@ class Form:
         x_coordinate = []
         for frame in self.shape:
             x_coordinate.append(frame.x)
-        return (x_coordinate)
+        return x_coordinate
 
     def calcul_rx2(self, yg, zg):
         """inputs are a list of coord and yg zg coordinates of the center of gravity
@@ -163,14 +162,14 @@ class Form:
         return rx2, ry2, rz2, xy, yz, xz
 
     def plotting(self):
-        les_x=[]
-        les_y=[]
-        les_z=[]
+        les_x = []
+        les_y = []
+        les_z = []
         for frame in self.shape:
-            x=frame.x
+            x = frame.x
             for coord in frame.coords:
-                y=coord[0]
-                z=-coord[1]
+                y = coord[0]
+                z = -coord[1]
                 les_x.append(x)
                 les_y.append(y)
                 les_z.append(z)
@@ -180,12 +179,12 @@ class Form:
                 les_x.append(x)
                 les_y.append(y)
                 les_z.append(z)
-        les_z=np.array(les_z)
-        les_y=np.array(les_y)
-        les_x=np.array(les_x)
+        les_z = np.array(les_z)
+        les_y = np.array(les_y)
+        les_x = np.array(les_x)
         fig = plt.figure()
-        ax=fig.gca(projection="3d")
-        ax.scatter(les_x,les_y,les_z,label="courbe",marker='d')
+        ax = fig.gca(projection="3d")
+        ax.scatter(les_x, les_y, les_z, label="courbe", marker='d')
         ax.set_title('test')
         plt.tight_layout()
         plt.show()

@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class Mass:
@@ -64,16 +63,12 @@ class Mass:
         xg = self.xg
         xe = self.xe
         xb = self.xb
-        mxb = self.mb_per_meter
-        mxe = self.me_per_meter
         m_per_meter = m / (xe - xb)
         delt = xe - xb
-        mb = m_per_meter
-        me = m_per_meter
         pourc = 0
         i = 0
         while delt > eps and i < 500000:
-            prop = abs(self.calcul_xg(xb, xe, self.mb_per_meter, self.me_per_meter) - xg) / (xe - xb)
+            prop = abs(self.calcul_xg() - xg) / (xe - xb)
             if self.calcul_xg() > xg:
                 pourc -= prop
             if self.calcul_xg() < xg:

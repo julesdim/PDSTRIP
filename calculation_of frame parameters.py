@@ -13,7 +13,7 @@ def conversion_coordinate_to_pdstrip(coord, midship_section):
     """ coord in meter is a tuple (x,y,z)
     The pd strip theory uses the coordinates in the midship sections,
     this function returns the x coordinate with the origine between the perpendiculars"""
-    return (coord[0] - midship_section, coord[1], coord[2])
+    return coord[0] - midship_section, coord[1], coord[2]
 
 
 def calculation_coord(filename):
