@@ -88,7 +88,7 @@ class Form:
 
     def calcul_xy(self, xg, yg):
         """inputs are a list of coord and xg yg coordinates of the center of gravity
-            it returns the mass weighted average of (x-xg)(y-yg)"""
+            it returns the weight weighted average of (x-xg)(y-yg)"""
         sum = 0  # initialization of the sum
         nb = 0
         for frame in self.shape:

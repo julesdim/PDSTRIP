@@ -130,7 +130,7 @@ def calcul_rz2(coord, xg, yg):
 
 def calcul_xy(coord, xg, yg):
     """inputs are a list of coord and xg yg coordinates of the center of gravity
-        it returns the mass weighted average of (x-xg)(y-yg)"""
+        it returns the weight weighted average of (x-xg)(y-yg)"""
     sum = 0  # initialization of the sum
     for i in range(len(coord)):
         # we get the x coordinate
@@ -149,7 +149,7 @@ def calcul_xy(coord, xg, yg):
 
 def calcul_yz(coord, yg, zg):
     """inputs are a list of coord and xg yg coordinates of the center of gravity
-            it returns the mass weighted average of (y-yg)(z-zg)"""
+            it returns the weight weighted average of (y-yg)(z-zg)"""
     sum = 0  # initialization of the sum
     for i in range(len(coord)):
         # we get the coordinates
@@ -168,7 +168,7 @@ def calcul_yz(coord, yg, zg):
 
 def calcul_xz(coord, xg, zg):
     """inputs are a list of coord and xg yg coordinates of the center of gravity
-            it returns the mass weighted average of (x-xg)(z-zg)"""
+            it returns the weight weighted average of (x-xg)(z-zg)"""
     sum = 0  # initialization of the sum
     for i in range(len(coord)):
         # we get the coordinates
@@ -181,16 +181,16 @@ def calcul_xz(coord, xg, zg):
 
 
 def mass_list(masses):
-    """the input is a csv file with all the masses with the beginning of the mass along the x axis and the ending of this mass
-    there is the center of gravity of this mass, the turning radius and finally the position of the centyer of gravity along
+    """the input is a csv file with all the masses with the beginning of the weight along the x axis and the ending of this weight
+    there is the center of gravity of this weight, the turning radius and finally the position of the centyer of gravity along
     z axis from the Free surface, it returns the sames informations but with a list of that masses """
     fichier = open(masses, "rt")
     list_of_masses = []  # initialisation of the list of masses
     the_lines = fichier.readlines()
-    total_mass = 0  # to check the total mass
+    total_mass = 0  # to check the total weight
     for line in the_lines:
         line = line.strip("\n").split(";")  # we stop the line to the \n and we cut the information where there is a ";"
-        m = float(line[0]) / 1000  # the first info is the object mass
+        m = float(line[0]) / 1000  # the first info is the object weight
         total_mass += m
         xb = float(line[1])  # the second is the beginning
         xe = float(line[2])  # the end
@@ -203,7 +203,7 @@ def mass_list(masses):
             me_per_meter = m / (xb - xe)
             mb_per_meter = me_per_meter
         mass = truc.Mass(m, xb, xe, xg, yr, z, mb_per_meter, me_per_meter)
-        print(mass.mass)
+        print(mass.weight)
         list_of_masses.append(mass)  # we append the current value
     print(total_mass, "tm")
     print(list_of_masses)
@@ -211,7 +211,7 @@ def mass_list(masses):
 
 
 def graph_loading(list_mass, x_min, x_max):
-    """That function allow the user to print the weightloading, for a list of mass, and with the
+    """That function allow the user to print the weightloading, for a list of weight, and with the
     boundaries of the ship"""
     delt_x = 0.1  # value of the strip to calculate the ship loading
     les_x = np.arange(x_min, x_max + delt_x, delt_x)  # coordinates of each strip
@@ -221,7 +221,7 @@ def graph_loading(list_mass, x_min, x_max):
         x_inf = les_x[i]
         x_up = les_x[i + 1]
         # coordinates of the strip i
-        el_mass = mass_calculation(list_mass, x_inf, x_up) / delt_x  # element of mass for the strip
+        el_mass = mass_calculation(list_mass, x_inf, x_up) / delt_x  # element of weight for the strip
         mass_per_m.append(el_mass)  # we add to the list
     plt.plot(les_x, mass_per_m)
     plt.title("weight loading")
@@ -232,25 +232,25 @@ def graph_loading(list_mass, x_min, x_max):
 def mass_calculation(masses_list, xb, xe):
     """The inputs are the list of the masses in the ship, and the beginning of the frame where we want to calculate the center
     of gravity, along the x-axis, xb and xe.
-    It returns the total mass in that section"""
+    It returns the total weight in that section"""
     n = len(masses_list)
     tm = 0
     for i in range(n):
-        m = masses_list[i].mass
-        xbm = masses_list[i].xb  # beginning of the mass
-        xem = masses_list[i].xe  # end of the mass
-        xgm = masses_list[i].xg
-        mb = masses_list[i].mb_per_meter
-        me = masses_list[i].me_per_meter
+        m = masses_list[i].weight
+        xbm = masses_list[i].xb  # beginning of the weight
+        xem = masses_list[i].x_end  # end of the weight
+        xgm = masses_list[i].x_coordinate_CoG
+        mb = masses_list[i].linear_density_beginning
+        me = masses_list[i].linear_density_end
         if xbm < xe and xem > xb:
-            rb = np.max([xb, xbm])  # real beginning of the mass for the section
+            rb = np.max([xb, xbm])  # real beginning of the weight for the section
             re = np.min([xe, xem])
             mbr = mb + (rb - xbm) * (mb - me) / (xbm - xem)
             mer = mb + (re - xbm) * (mb - me) / (xbm - xem)
             if xgm != (xbm - xem) / 2:
                 tm += (re - rb) * (mbr + mer) / 2
             if xgm == (xbm - xem) / 2:
-                # real end of the mass for the section, if the end of the mass is after the end of the section
+                # real end of the weight for the section, if the end of the weight is after the end of the section
                 tm += (re - rb) * (mbr + mer) / 2
     return tm
 
@@ -260,7 +260,7 @@ def calcul_center_of_gravity(list_masses, xb, xe):
      warning the origine is the Pias origin of the report, a conversion is needed
      if we want to use the coordinates relative to the midship, for the PD Strip Theory.
      It returns the coordinates of the center of gravity as a tuple (xg,yg,zg)
-     It supposes the mass is distributed linearly"""
+     It supposes the weight is distributed linearly"""
     tm = mass_calculation(list_masses, xb, xe)
     n = len(list_masses)
     # initialization of the values
@@ -268,16 +268,16 @@ def calcul_center_of_gravity(list_masses, xb, xe):
     yg = 0
     zg = 0
     for i in range(n):
-        m = list_masses[i].mass
-        xbm = list_masses[i].xb  # beginning of the mass
-        xem = list_masses[i].xe  # end of the mass
+        m = list_masses[i].weight
+        xbm = list_masses[i].xb  # beginning of the weight
+        xem = list_masses[i].x_end  # end of the weight
         if xbm < xe and xem > xb:
-            rb = np.max([xb, xbm])  # real beginning of the mass, if the mass begins before the frame
+            rb = np.max([xb, xbm])  # real beginning of the weight, if the weight begins before the frame
             re = np.min([xe, xem])  # same for the end
-            rm = m * (re - rb) / (xem - xbm)  # proportion of the mass situated between the section
+            rm = m * (re - rb) / (xem - xbm)  # proportion of the weight situated between the section
             xg += rm * (re + rb) / 2
-            yg += rm * list_masses[i].yg
-            zg += rm * list_masses[i].zg
+            yg += rm * list_masses[i].y_coordinate_CoG
+            zg += rm * list_masses[i].z_coordinate_CoG
             # print(masses[i][5])
     try:
         xg = xg / tm
@@ -362,7 +362,7 @@ def PD_strip_info_from_aft_to_for_mid_frame(masses, coord):
             f.write(str(inf) + " ")
         f.write("\n")
     f.close()
-    # total mass is checked
+    # total weight is checked
     return
 
 

@@ -2,79 +2,81 @@ import numpy as np
 
 
 class Mass:
-    def __init__(self, mass, xb, xe, xg, yg, zg, mb_per_meter, me_per_meter):
-        self.mass = mass
-        self.xb = xb
-        self.xe = xe
-        self.xg = xg
-        self.yg = yg
-        self.zg = zg
-        self.mb_per_meter = mb_per_meter
-        self.me_per_meter = me_per_meter
+    """A simple class to define a weight by the weight, the beginning, the end, the center of gravity along all the axis
+    the linear density at the beginning and at the end, it permits to compute different value of the weight if necessary
+    """
 
-    def calcul_xg(self):
-        xe = self.xe
-        xb = self.xb
-        mxb = self.mb_per_meter
-        mxe = self.me_per_meter
-        les_x = np.arange(xb, xe + 0.01, 0.01)
-        les_y = (mxe - mxb) / (xe - xb) * (les_x - xb) + mxb
-        s = 0
-        s_y = 0
-        for i in range(len(les_x)):
-            s += les_x[i] * les_y[i]
-            s_y += les_y[i]
-        return s / s_y
+    def __init__(self, weight, x_beginning, x_end, x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG,
+                 linear_density_beginning, linear_density_end):
+        self.weight = weight
+        self.x_beginning = x_beginning
+        self.x_end = x_end
+        self.x_coordinate_CoG = x_coordinate_CoG
+        self.y_coordinate_CoG = y_coordinate_CoG
+        self.z_coordinate_CoG = z_coordinate_CoG
+        self.linear_density_beginning = linear_density_beginning
+        self.linear_density_end = linear_density_end
 
-    def calcul_xg2(self, xb, xe):
-        mxb = self.mb_per_meter
-        mxe = self.me_per_meter
-        les_x = np.arange(xb, xe + 0.01, 0.01)
-        les_y = (mxe - mxb) / (xe - xb) * (les_x - xb) + mxb
-        s = 0
-        s_y = 0
-        for i in range(len(les_x)):
-            s += les_x[i] * les_y[i]
-            s_y += les_y[i]
-        if s_y == 0:
-            print(les_x)
-            print(les_y)
-        return s / s_y
+    def calcul_xg_mass(self):
+        x_end = self.x_end
+        x_beginning = self.x_beginning
+        linear_density_beginning = self.linear_density_beginning
+        linear_density_end = self.linear_density_end
+        list_of_x_coordinates = np.arange(x_beginning, x_end + 0.01, 0.01)
+        list_of_y_coordinates = (linear_density_end - linear_density_beginning) / \
+                                (x_end - x_beginning) * (list_of_x_coordinates - x_beginning) + linear_density_beginning
+        sum = 0
+        sum_y = 0
+        for i in range(len(list_of_x_coordinates)):
+            sum += list_of_x_coordinates[i] * list_of_y_coordinates[i]
+            sum_y += list_of_y_coordinates[i]
+        return sum / sum_y
 
-    def calcul_mass(self):
-        xe = self.xe
-        xb = self.xb
-        mb = self.mb_per_meter
-        me = self.me_per_meter
-        return (xe - xb) * (mb + me) / 2
+    def calcul_x_coordinate_CoG_for_coordinates(self, x_beginning_part, x_end_part):
+        linear_density_beginning = self.linear_density_beginning
+        linear_density_end = self.linear_density_end
+        list_of_x_coordinates = np.arange(x_beginning_part, x_end_part + 0.01, 0.01)
+        list_of_y_coordinates = (linear_density_end - linear_density_beginning) / (x_end_part - x_beginning_part) * (
+                list_of_x_coordinates - x_beginning_part) + linear_density_beginning
+        sum = 0
+        sum_y = 0
+        for i in range(len(list_of_x_coordinates)):
+            sum += list_of_x_coordinates[i] * list_of_y_coordinates[i]
+            sum_y += list_of_y_coordinates[i]
+        if sum_y == 0:
+            print(list_of_x_coordinates)
+            print(list_of_y_coordinates)
+        return sum / sum_y
 
-    def calcul_mass2(self, xb, xe):
-        xem = self.xe
-        xbm = self.xb
-        mb = self.mb_per_meter
-        me = self.me_per_meter
-        coeff = (me - mb) / (xem - xbm)
-        mbr = mb + coeff * (xb - xbm)
-        mer = mb + coeff * (xe - xbm)
-        return mbr, mer
+    def calcul_linear_density_for_coordinates(self, x_beginning_part, x_end_part):
+        x_end_of_the_mass = self.x_end
+        x_beginning_of_the_mass = self.x_beginning
+        linear_density_beginning = self.linear_density_beginning
+        linear_density_end = self.linear_density_end
+        coefficient_of_the_line = (linear_density_end - linear_density_beginning) / (x_end_of_the_mass -
+                                                                                     x_beginning_of_the_mass)
+        linear_density_at_x_beginning_part = linear_density_beginning + coefficient_of_the_line * (x_beginning_part -
+                                                                                              x_beginning_of_the_mass)
+        linear_density_at_x_end_part= linear_density_beginning + coefficient_of_the_line * (x_end_part - x_beginning_of_the_mass)
+        return linear_density_at_x_beginning_part, linear_density_at_x_end_part
 
     def calcul_xg_not_the_mid(self, eps=0.00001):
-        m = self.mass
-        xg = self.xg
-        xe = self.xe
-        xb = self.xb
-        m_per_meter = m / (xe - xb)
-        delt = xe - xb
-        pourc = 0
+        weight = self.weight
+        x_coordinate_CoG = self.x_coordinate_CoG
+        x_end_mass = self.x_end
+        x_beginning_mass = self.x_beginning
+        linear_density_beginning = weight / (x_end_mass - x_beginning_mass)
+        gap = x_end_mass - x_beginning_mass
+        coefficient = 0
         i = 0
-        while delt > eps and i < 500000:
-            prop = abs(self.calcul_xg() - xg) / (xe - xb)
-            if self.calcul_xg() > xg:
-                pourc -= prop
-            if self.calcul_xg() < xg:
-                pourc += prop
-            self.mb_per_meter = (1 - pourc) * m_per_meter
-            self.me_per_meter = (1 + pourc) * m_per_meter
-            delt = abs(self.calcul_xg() - xg)
+        while gap > eps and i < 500000:
+            ratio = abs(self.calcul_xg_mass() - x_coordinate_CoG) / (x_end_mass - x_beginning_mass)
+            if self.calcul_xg_mass() > x_coordinate_CoG:
+                coefficient -= ratio
+            if self.calcul_xg_mass() < x_coordinate_CoG:
+                coefficient += ratio
+            self.linear_density_beginning = (1 - coefficient) * linear_density_beginning
+            self.linear_density_end = (1 + coefficient) * linear_density_beginning
+            gap = abs(self.calcul_xg_mass() - x_coordinate_CoG)
             i += 1
-        return self.mb_per_meter, self.me_per_meter
+        return self.linear_density_beginning, self.linear_density_end

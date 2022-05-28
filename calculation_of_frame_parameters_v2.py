@@ -63,9 +63,9 @@ def collection_of_coordinates(filename):
 
 
 def collection_of_mass(filename):
-    """That functions reads a csv file and collects all the information, the mass in ton, the beginning of the mass,
-    the end of the mass, the center of gravity with x coordinate, y and z, then it defines the mass per meter at the
-    beginning of the mass repartition and the mass per meter at the end of the mass repartition (along the x axis), the
+    """That functions reads a csv file and collects all the information, the weight in ton, the beginning of the weight,
+    the end of the weight, the center of gravity with x coordinate, y and z, then it defines the weight per meter at the
+    beginning of the weight repartition and the weight per meter at the end of the weight repartition (along the x axis), the
     code uses the localisation of the center of gravity to compute that values.
     :parameter
     filename: a csv file
@@ -73,17 +73,17 @@ def collection_of_mass(filename):
         y coordinate of CoG, z coordinate of the CoG
     :returns
     list_of_masses: a loading file
-        it is a list of mass, defined by the information mentioned above but with mass per
+        it is a list of weight, defined by the information mentioned above but with weight per
         meter computed at the beginning and at the end
      """
     file = open(filename, "rt")
     weight_loading = ld.Loading()  # initialisation of the list of masses
     the_lines = file.readlines()
-    total_mass = 0  # to check the total mass
+    total_mass = 0  # to check the total weight
     for line in the_lines:
         line_formatted = line.strip("\n").split(
             ";")  # we stop the line to the \n and we cut the information where there is a ";"
-        current_weight = float(line_formatted[0])  # the first info is the object mass
+        current_weight = float(line_formatted[0])  # the first info is the object weight
         total_mass += current_weight
         x_beginning = float(line_formatted[1])  # the second is the beginning
         x_end = float(line_formatted[2])  # the end
@@ -146,7 +146,7 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
             # we write every input for the section
             file.write(str(input_value) + " ")
         file.write("\n")
-    file.close()  # total mass is checked
+    file.close()  # total weight is checked
     return
 
 
