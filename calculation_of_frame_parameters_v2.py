@@ -145,7 +145,7 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
     file = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
     # for every section we have the backward and the forward
     for i in range(len(hull_form.shape) - 1):
-        back_section = (hull_form.shape[i].x_coordinate + hull_form.shape[i + 1].x_coordinate) / 2
+        back_section = (hull_form.shape[i+1].x_coordinate)# + hull_form.shape[i + 1].x_coordinate) / 2
         front_section = conversion_for_pdstrip_xaxis(Lpp, Lpp / 2)
         weight_of_the_current_part = weight_loading.mass_calculation_for_coordinates(back_section, front_section)
         try:
