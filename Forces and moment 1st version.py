@@ -110,4 +110,4 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok", 0.2, 1540.43, 0, 0,"absolute")
+graph_file_for_one_wave("pdstrip.out.ok", 0.1, 6161.7, 0, 0,"real")
