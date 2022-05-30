@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import loading as ld
 
 
 class Form:
@@ -268,7 +269,7 @@ class Form:
                 sum += (x - X_CoG) * (z - Z_CoG)  # we add the value for the actual point
         return sum / counter
 
-    def calcul_every_parameters(self, x_start, x_end, X_CoG, Y_CoG, Z_CoG):
+    def calcul_every_parameters(self, x_start, x_end, X_CoG, Y_CoG, Z_CoG, weightloading):
         """That function creates a new form, it keeps just the frame between a section, from the x_start to the x_end.
         For that form it computes all the information, the square of the inertial radius for every axis and the
         average for xy, yz and xz.
@@ -307,7 +308,8 @@ class Form:
         for i in range(len(self.shape)):
             if x_start <= self.shape[i].x_coordinate <= x_end:
                 list_frame.__append__(self.shape[i])
-        radius_of_inertia_x2 = list_frame.calcul_square_inertial_radius_x(Y_CoG, Z_CoG)
+        radius_of_inertia_x2 = self.calcul_square_inertial_radius_x_mass_average(weightloading, Y_CoG, Z_CoG, x_start,
+                                                                                 x_end)
         radius_of_inertia_y2 = list_frame.calcul_square_inertial_radius_y(X_CoG, Z_CoG)
         radius_of_inertia_z2 = list_frame.calcul_square_inertial_radius_z(X_CoG, Y_CoG)
         average_xy = list_frame.calcul_average_xy(X_CoG, Y_CoG)
@@ -362,10 +364,12 @@ class Form:
         list_x_coordinates = []
         list_y_coordinates = []
         for frame in self.shape:
+            print(frame.x_coordinate)
             if frame.x_coordinate == x:
                 for coordinate in frame.coordinates:
                     list_x_coordinates.append(coordinate[0])
                     list_y_coordinates.append(coordinate[1])
+        print(list_x_coordinates)
         plt.plot(list_x_coordinates, list_y_coordinates)
         plt.show()
 
@@ -386,7 +390,268 @@ class Form:
                 for j in range(len(frame.coordinates)):
                     if frame.coordinates[i][0] == frame.coordinates[j][0] and \
                             frame.coordinates[i][1] == frame.coordinates[j][1] and i != j:
-                        if frame.coordinates[i][0]==frame.coordinates[j][0]:
+                        if frame.coordinates[i][0] == frame.coordinates[j][0]:
                             print("pb y")
-                        if frame.coordinates[i][1]==frame.coordinates[j][0]:
+                        if frame.coordinates[i][1] == frame.coordinates[j][0]:
                             print("pb x")
+
+    def calcul_square_inertial_radius_x_mass_average(self, weightloading, Y_Cog, Z_Cog, x_start, x_end):
+        n = len(self.shape)
+        sum = 0
+        counter = 0
+        real_start = 0
+        real_end = 0
+        total_mass = weightloading.mass_calculation_for_coordinates(x_start, x_end)
+        for i in range(1, n):
+            if x_start <= self.shape[i].x_coordinate <= x_end:
+                if i == n - 1 and self.shape[i].x_coordinate == x_end:
+                    real_end = x_end
+                    real_start = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                if i == 1 and self.shape[i - 1].x_coordinate == x_start:
+                    real_start = x_start
+                    real_end = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                elif 1 < i < n - 1:
+                    x_start_part = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                    x_end_part = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                    real_start = max([x_start, x_start_part])
+                    real_end = min([x_end_part, x_end])
+                real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
+                if total_mass != 0:
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        z = coord[1]
+                        sum += ((y - Y_Cog) ** 2 + (z - Z_Cog) ** 2) * real_mass / total_mass
+                if total_mass == 0:
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        z = coord[1]
+                        counter += 1
+                        sum += (y - Y_Cog) ** 2 + (z - Z_Cog) ** 2
+                    sum /= counter
+        return sum
+
+    def calcul_square_inertial_radius_y_mass_average(self, weightloading, X_Cog, Z_Cog, x_start, x_end):
+        n = len(self.shape)
+        sum = 0
+        counter = 0
+        real_start = 0
+        real_end = 0
+        total_mass = weightloading.mass_calculation_for_coordinates(x_start, x_end)
+        for i in range(1, n):
+            x = self.shape[i].x_coordinate
+            if x_start <= self.shape[i].x_coordinate <= x_end:
+                if i == n - 1 and self.shape[i].x_coordinate == x_end:
+                    real_end = x_end
+                    x = x_end
+                    real_start = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                if i == 1 and self.shape[i - 1].x_coordinate == x_start:
+                    real_start = x_start
+                    x = x_start
+                    real_end = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                elif 1 < i < n - 1:
+                    x_start_part = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                    x_end_part = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                    real_start = max([x_start, x_start_part])
+                    real_end = min([x_end_part, x_end])
+                real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
+                if total_mass != 0:
+                    for coord in self.shape[i].coordinates:
+                        z = coord[1]
+                        sum += ((x - X_Cog) ** 2 + (z - Z_Cog) ** 2) * real_mass / total_mass
+                if total_mass == 0:
+                    for coord in self.shape[i].coordinates:
+                        z = coord[1]
+                        counter += 1
+                        sum += (x - X_Cog) ** 2 + (z - Z_Cog) ** 2
+                    sum /= counter
+        return sum
+
+    def calcul_square_inertial_radius_z_mass_average(self, weightloading, X_Cog, Y_Cog, x_start, x_end):
+        n = len(self.shape)
+        sum = 0
+        counter = 0
+        real_start = 0
+        real_end = 0
+        total_mass = weightloading.mass_calculation_for_coordinates(x_start, x_end)
+        for i in range(1, n):
+            x = self.shape[i].x_coordinate
+            if x_start <= self.shape[i].x_coordinate <= x_end:
+                if i == n - 1 and self.shape[i].x_coordinate == x_end:
+                    real_end = x_end
+                    x = x_end
+                    real_start = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                if i == 1 and self.shape[i - 1].x_coordinate == x_start:
+                    real_start = x_start
+                    x = x_start
+                    real_end = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                elif 1 < i < n - 1:
+                    x_start_part = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                    x_end_part = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                    real_start = max([x_start, x_start_part])
+                    real_end = min([x_end_part, x_end])
+                real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
+                if total_mass != 0:
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        sum += ((x - X_Cog) ** 2 + (y - Y_Cog) ** 2) * real_mass / total_mass
+                if total_mass == 0:
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        counter += 1
+                        sum += (x - X_Cog) ** 2 + (y - Y_Cog) ** 2
+                    sum /= counter
+        return sum
+
+    def calcul_xy_mass_average(self, weightloading, X_Cog, Y_Cog, x_start, x_end):
+        n = len(self.shape)
+        sum = 0
+        counter = 0
+        real_start = 0
+        real_end = 0
+        total_mass = weightloading.mass_calculation_for_coordinates(x_start, x_end)
+        for i in range(1, n):
+            x = self.shape[i].x_coordinate
+            if x_start <= self.shape[i].x_coordinate <= x_end:
+                if i == n - 1 and self.shape[i].x_coordinate == x_end:
+                    real_end = x_end
+                    x = x_end
+                    real_start = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                if i == 1 and self.shape[i - 1].x_coordinate == x_start:
+                    real_start = x_start
+                    x = x_start
+                    real_end = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                elif 1 < i < n - 1:
+                    x_start_part = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                    x_end_part = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                    real_start = max([x_start, x_start_part])
+                    real_end = min([x_end_part, x_end])
+                real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
+                if total_mass != 0:
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        sum += ((x - X_Cog) * (y - Y_Cog)) * real_mass / total_mass
+                if total_mass == 0:
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        counter += 1
+                        sum += (x - X_Cog) * (y - Y_Cog)
+                    sum /= counter
+        return sum
+
+    def calcul_yz_mass_average(self, weightloading, Y_Cog, Z_Cog, x_start, x_end):
+        n = len(self.shape)
+        sum = 0
+        counter = 0
+        real_start = 0
+        real_end = 0
+        total_mass = weightloading.mass_calculation_for_coordinates(x_start, x_end)
+        for i in range(1, n):
+            if x_start <= self.shape[i].x_coordinate <= x_end:
+                if i == n - 1 and self.shape[i].x_coordinate == x_end:
+                    real_end = x_end
+                    real_start = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                if i == 1 and self.shape[i - 1].x_coordinate == x_start:
+                    real_start = x_start
+                    real_end = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                elif 1 < i < n - 1:
+                    x_start_part = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                    x_end_part = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                    real_start = max([x_start, x_start_part])
+                    real_end = min([x_end_part, x_end])
+                real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
+                if total_mass != 0:
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        z = coord[1]
+                        sum += ((y - Y_Cog) * (z - Z_Cog)) * real_mass / total_mass
+                if total_mass == 0:
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        z = coord[1]
+                        counter += 1
+                        sum += (y - Y_Cog) * (z - Z_Cog)
+                    sum /= counter
+        return sum
+
+    def calcul_xz_mass_average(self, weightloading, X_Cog, Z_Cog, x_start, x_end):
+        n = len(self.shape)
+        sum = 0
+        counter = 0
+        real_start = 0
+        real_end = 0
+        total_mass = weightloading.mass_calculation_for_coordinates(x_start, x_end)
+        for i in range(1, n):
+            x = self.shape[i].x_coordinate
+            if x_start <= self.shape[i].x_coordinate <= x_end:
+                if i == n - 1 and self.shape[i].x_coordinate == x_end:
+                    real_end = x_end
+                    x = x_end
+                    real_start = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                if i == 1 and self.shape[i - 1].x_coordinate == x_start:
+                    real_start = x_start
+                    x = x_start
+                    real_end = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                elif 1 < i < n - 1:
+                    x_start_part = (self.shape[i - 1].x_coordinate + self.shape[i].x_coordinate) / 2
+                    x_end_part = (self.shape[i].x_coordinate + self.shape[i + 1].x_coordinate) / 2
+                    real_start = max([x_start, x_start_part])
+                    real_end = min([x_end_part, x_end])
+                real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
+                if total_mass != 0:
+                    for coord in self.shape[i].coordinates:
+                        z = coord[1]
+                        sum += ((x - X_Cog) * (z - Z_Cog)) * real_mass / total_mass
+                if total_mass == 0:
+                    for coord in self.shape[i].coordinates:
+                        z = coord[1]
+                        counter += 1
+                        sum += (x - X_Cog) * (z - Z_Cog)
+                    sum /= counter
+        return sum
+
+
+    def calcul_every_parameters_mass_average(self, x_start, x_end, X_CoG, Y_CoG, Z_CoG, weightloading):
+        """That function creates a new form, it keeps just the frame between a section, from the x_start to the x_end.
+        For that form it computes all the information, the square of the inertial radius for every axis and the
+        average for xy, yz and xz.
+
+        :argument
+        ---------
+        x_start: a float
+            the x coordinate of the start section
+        x_end: a float
+            the x coordinate of the end section
+        X_CoG: a float
+            the x coordinate of the center of gravity for the section
+        Y_CoG: a float
+            the y coordinate of the center of gravity for the section
+        Z_CoG: a float
+            the z coordinate of the center of gravity for the section
+
+        :returns
+        ---------
+        radius_of_inertia_x2: a float
+            the square of the inertial radius relating to the axis through the center of gravity
+        parallel to the x-axis for the section
+        radius_of_inertia_y2: a float
+            the square of the inertial radius relating to the axis through the center of gravity
+        parallel to the y-axis for the section
+        radius_of_inertia_z2: a float
+            the square of the inertial radius relating to the axis through the center of gravity
+        parallel to the z-axis for the section
+        average_xy: a float
+            the mass weighted average of (x-X_CoG)*(y-Y_CoG) for the section
+        average_yz: a float
+            the mass weighted average of (y-Y_CoG)*(z-Z_CoG) for the section
+        average_xz: a float
+            the mass weighted average of (x-X_CoG)*(z-Z_CoG) for the section"""
+        radius_of_inertia_x2 = self.calcul_square_inertial_radius_x_mass_average(weightloading, Y_CoG, Z_CoG, x_start,
+                                                                                 x_end)
+        radius_of_inertia_y2 = self.calcul_square_inertial_radius_y_mass_average(weightloading, X_CoG, Z_CoG, x_start,
+                                                                                 x_end)
+        radius_of_inertia_z2 = self.calcul_square_inertial_radius_z_mass_average(weightloading, X_CoG, Z_CoG, x_start,
+                                                                                 x_end)
+        average_xy = self.calcul_xy_mass_average(weightloading, X_CoG, Y_CoG,x_start,x_end)
+        average_yz = self.calcul_yz_mass_average(weightloading, Y_CoG, Z_CoG,x_start,x_end)
+        average_xz = self.calcul_xz_mass_average(weightloading, X_CoG, Z_CoG,x_start,x_end)
+        return radius_of_inertia_x2, radius_of_inertia_y2, radius_of_inertia_z2, average_xy, average_yz, average_xz

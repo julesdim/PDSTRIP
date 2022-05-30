@@ -116,10 +116,11 @@ class Mass:
         linear_density_start = self.linear_density_start
         linear_density_end = self.linear_density_end
         coefficient_of_the_line = (linear_density_end - linear_density_start) / (x_end_of_the_mass -
-                                                                                     x_start_of_the_mass)
+                                                                                 x_start_of_the_mass)
         linear_density_at_x_start_part = linear_density_start + coefficient_of_the_line * (x_start_part -
-                                                                                                   x_start_of_the_mass)
-        linear_density_at_x_end_part= linear_density_start + coefficient_of_the_line * (x_end_part - x_start_of_the_mass)
+                                                                                           x_start_of_the_mass)
+        linear_density_at_x_end_part = linear_density_start + coefficient_of_the_line * (
+                    x_end_part - x_start_of_the_mass)
         return linear_density_at_x_start_part, linear_density_at_x_end_part
 
     def calcul_xg_not_the_mid(self, eps=0.00001):

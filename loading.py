@@ -9,6 +9,7 @@ class Loading:
     -----------
     masses: a list
         it's a list of mass object"""
+
     def __init__(self):
         self.masses = []
 
@@ -71,7 +72,7 @@ class Loading:
                 real_start = np.max([x_start, x_start_mass])  # real beginning of the weight for the section
                 real_end = np.min([x_end, x_end_mass])
                 real_linear_density_start = linear_density_start + (real_start - x_start_mass) * \
-                                            (linear_density_end - linear_density_start) /(x_end_mass - x_start_mass)
+                                            (linear_density_end - linear_density_start) / (x_end_mass - x_start_mass)
                 real_linear_density_end = linear_density_start + (real_end - x_start_mass) * \
                                           (linear_density_end - linear_density_start) / (x_end_mass - x_start_mass)
                 if x_CoG_mass != (x_start_mass + x_end_mass) / 2:
@@ -106,10 +107,11 @@ class Loading:
         Y_CoG = 0
         Z_CoG = 0
         for i in range(number_of_masses):
-            x_start_mass = self.masses[i].x_start# beginning of the weight
+            x_start_mass = self.masses[i].x_start  # beginning of the weight
             x_end_mass = self.masses[i].x_end  # end of the weight
             if x_start_mass < x_end and x_end_mass > x_start:
-                real_start = np.max([x_start, x_start_mass])  # real beginning of the weight, if the weight begins before the frame
+                real_start = np.max(
+                    [x_start, x_start_mass])  # real beginning of the weight, if the weight begins before the frame
                 real_end = np.min([x_end, x_end_mass])
                 real_linear_density_start, real_linear_density_end = \
                     self.masses[i].calcul_linear_density_for_coordinates(real_start, real_end)

@@ -145,7 +145,7 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
     for i in range(len(hull_form.shape) - 1):
         back_section = (hull_form.shape[i].x_coordinate + hull_form.shape[i + 1].x_coordinate) / 2
         front_section = conversion_for_pdstrip_xaxis(Lpp, Lpp / 2)
-        weight_o_the_current_part = weight_loading.mass_calculation_for_coordinates(back_section, front_section)
+        weight_of_the_current_part = weight_loading.mass_calculation_for_coordinates(back_section, front_section)
         try:
             x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG = \
                 weight_loading.calcul_center_of_gravity_for_coordinates(back_section, front_section)
@@ -153,9 +153,9 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
             x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG = \
                 hull_form.center_of_gravity_no_mass_for_coordinates(back_section, front_section)
         radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square, xy, yz, xz = \
-            hull_form.calcul_every_parameters(back_section, front_section, x_coordinate_CoG, y_coordinate_CoG,
-                                              z_coordinate_CoG)
-        data = [weight_o_the_current_part, x_coordinate_CoG, y_coordinate_CoG, \
+            hull_form.calcul_every_parameters_mass_average(back_section, front_section, x_coordinate_CoG,
+                                                           y_coordinate_CoG,z_coordinate_CoG, weight_loading)
+        data = [weight_of_the_current_part, x_coordinate_CoG, y_coordinate_CoG, \
                 z_coordinate_CoG, radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square, \
                 xy, yz, xz]
         for input_value in data:
@@ -170,4 +170,4 @@ masses1 = "masses1.csv"
 shape1 = "barge_standaard_pias_text_file.txt"
 masses2 = "masses.csv"
 shape2 = "correct_frames_of_oural.asc"
-Writing_of_the_PDstrip_input_file(masses2, shape2, 135)
+Writing_of_the_PDstrip_input_file(masses1, shape1, 100)
