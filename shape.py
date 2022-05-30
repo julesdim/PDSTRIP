@@ -76,11 +76,11 @@ class Form:
             for i in range(number_coordinates):
                 list_z_coordinates_of_frame.append(coordinates[i][1])
                 list_y_coordinates_of_frame.append(coordinates[i][0])
-            maximum_z = min(list_z_coordinates_of_frame)  # we save the max of z in pd strip coordinates, that means
+            maximum_z = max(list_z_coordinates_of_frame)  # we save the max of z in pd strip coordinates, that means
             # z to the ground
             maximum_y = max(list_y_coordinates_of_frame)
             for coordinate in coordinates:
-                if coordinate[1] > maximum_z and abs(coordinate[0]) < maximum_y:
+                if coordinate[1] < maximum_z and abs(coordinate[0]) < maximum_y:
                     self.shape[j].__append__((coordinate[0], maximum_z))
         return self
 
@@ -335,7 +335,7 @@ class Form:
             x = frame.x_coordinate
             for coordinate in frame.coordinates:
                 y = coordinate[0]
-                z = -coordinate[1]
+                z = coordinate[1]
                 list_x_coordinates.append(x)
                 list_y_coordinates.append(y)
                 list_z_coordinates.append(z)

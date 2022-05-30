@@ -142,4 +142,3 @@ class Loading:
             mass.x_start = mass.x_start - midship
             mass.x_end = mass.x_end - midship
             mass.x_coordinate_CoG = mass.x_coordinate_CoG - midship
-            mass.z_coordinate_CoG = -mass.z_coordinate_CoG

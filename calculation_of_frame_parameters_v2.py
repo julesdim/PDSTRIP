@@ -55,7 +55,7 @@ def collection_of_coordinates(filename):
             boolean_for_beginning_of_the_frame = False  # As we just passed the start of the frame, next is false
         if line_counter != 0 and len(line_formatted) == 3:
             y_coordinate = (float(line_formatted[0]))
-            z_coordinate = (-float(line_formatted[1]))
+            z_coordinate = (float(line_formatted[1]))
             current_frame.__append__((y_coordinate, z_coordinate))  # we append to the list
             if y_coordinate != 0:
                 current_frame.__append__((-y_coordinate, z_coordinate))
@@ -145,7 +145,7 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
     file = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
     # for every section we have the backward and the forward
     for i in range(len(hull_form.shape) - 1):
-        back_section = (hull_form.shape[i+1].x_coordinate)# + hull_form.shape[i + 1].x_coordinate) / 2
+        back_section = (hull_form.shape[i+1].x_coordinate + hull_form.shape[i].x_coordinate) / 2
         front_section = conversion_for_pdstrip_xaxis(Lpp, Lpp / 2)
         weight_of_the_current_part = weight_loading.mass_calculation_for_coordinates(back_section, front_section)
         try:
