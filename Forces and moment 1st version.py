@@ -20,8 +20,8 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
         that's the value of the speed of the wave that we want to print the results
     text: a text object
         3 possibilities, "real" to plot the real part
-        "im" to plot the imaginary part
-        "abs" to plot the absolute value"
+        "imaginary" to plot the imaginary part
+        "absolute" to plot the absolute value"
 
     :returns
     --------
