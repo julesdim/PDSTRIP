@@ -6,22 +6,23 @@ class Mass:
     the linear density at the beginning and at the end, it permits to compute different value of the weight if necessary
 
     :attributes
-
-    weight: the weight of the mass
-
-    x_start: x_coordinate of the mass start
-
-    x_end: x_coordinate of the mass end
-
-    x_coordinate_CoG: x coordinate of the center of gravity
-
-    y_coordinate_CoG: y coordinate of the center of gravity
-
-    z_coordinate_CoG: z coordinate of the center of gravity
-
-    linear_density_start: linear density of the mass at x_start
-
-    linear_density_end: linear density of the mass at x_end
+    ------------
+    weight: a float
+        the weight of the mass
+    x_start: a float
+        x_coordinate of the mass start
+    x_end: a float
+        x_coordinate of the mass end
+    x_coordinate_CoG: a float
+        x coordinate of the center of gravity
+    y_coordinate_CoG: a float
+        y coordinate of the center of gravity
+    z_coordinate_CoG: a float
+        z coordinate of the center of gravity
+    linear_density_start: a float
+        linear density of the mass at x_start
+    linear_density_end: a float
+        linear density of the mass at x_end
     """
 
     def __init__(self, weight, x_start, x_end, x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG,
@@ -40,10 +41,14 @@ class Mass:
         new formula.
 
         :argument
-        self: the current mass
+        ----------
+        self: a mass object
+            the current mass
 
         :returns
-        X_CoG: the current x_coordinate of the center of gravity"""
+        ----------
+        X_CoG: a float
+            the current x_coordinate of the center of gravity"""
         x_end = self.x_end
         x_start = self.x_start
         linear_density_start = self.linear_density_start
@@ -63,12 +68,16 @@ class Mass:
         linear density's formula
 
         :argument
-        x_start_part: x coordinate of the section start
-
-        x_end_part: x coordinate of the section end
+        ------------
+        x_start_part: a float
+            x coordinate of the section start
+        x_end_part: a float
+            x coordinate of the section end
 
         :returns
-        X_CoG: the value of the center of gravity for the section"""
+        ------------
+        X_CoG: a float
+            the value of the center of gravity for the section"""
         linear_density_start = self.linear_density_start
         linear_density_end = self.linear_density_end
         list_of_x_coordinates = np.arange(x_start_part, x_end_part + 0.01, 0.01)
@@ -89,14 +98,18 @@ class Mass:
         compute the linear density
 
         :argument
-        x_start_part: x coordinate of the section start
-
-        x_end_part: x coordinate of the section end
+        ----------
+        x_start_part: a float
+            x coordinate of the section start
+        x_end_part: a float
+            x coordinate of the section end
 
         :returns
-        linear_density_at_x_start_part: the value for the x coordinate x_start_part
-
-        linear_density_at_x_end_part: the value for the x coordinate x_end_part
+        -----------
+        linear_density_at_x_start_part: a float
+            the value for the x coordinate x_start_part
+        linear_density_at_x_end_part: a float
+            the value for the x coordinate x_end_part
         """
         x_end_of_the_mass = self.x_end
         x_start_of_the_mass = self.x_start
@@ -114,9 +127,12 @@ class Mass:
         is defined equal at the beginning and at the end.
 
         :argument
-        eps: for the precision of the computation
+        -----------
+        eps: a float
+            for the precision of the computation
 
         :returns
+        ----------
         Nothing
         """
         weight = self.weight

@@ -8,13 +8,16 @@ import loading as ld
 def conversion_for_pdstrip_xaxis(x, midship):
     """That functions converts a x coordinate with an origin at the PPAR into a coordinate with an origin at
      middle ship
+
      :parameter
      ----------
      x: a float
         the coordinate to convert
      midship: a float
         the localisation of midship from the PPAR, corresponds to Lpp/2
+
     :returns
+    ----------
     x: the coordinates from the middle ship
      """
     return x - midship
@@ -22,9 +25,13 @@ def conversion_for_pdstrip_xaxis(x, midship):
 
 def collection_of_coordinates(filename):
     """That functions read a Pias file of coordinates, and it reads every coordinate to return a shape object
+
     :parameter
+    -----------
     filename: a text variable corresponding to the pias file of coordinates
+
     :returns
+    ----------
     form: A Form object corresponding to a list of frame, defined by a x coordinate and coordinates of point for that
     frame
     """
@@ -67,11 +74,15 @@ def collection_of_mass(filename):
     the end of the weight, the center of gravity with x coordinate, y and z, then it defines the weight per meter at the
     beginning of the weight repartition and the weight per meter at the end of the weight repartition (along the x axis), the
     code uses the localisation of the center of gravity to compute that values.
+
     :parameter
+    -----------
     filename: a csv file
         every line are : x coordinate of the beginning, x coordinate of the end, x coordinate of the center of gravity
         y coordinate of CoG, z coordinate of the CoG
+
     :returns
+    ----------
     list_of_masses: a loading file
         it is a list of weight, defined by the information mentioned above but with weight per
         meter computed at the beginning and at the end
@@ -105,7 +116,9 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
     """That function writes a file titled data_pdstrip.csv with all the input data from the frames that needs the
     PDstrip program, that function needs the loading informations, the shape of the ship, and the length between
     perpendiculars.
+
     :parameter
+    -----------
     masses_filename: a text variable
         it corresponds to a csv file
         every line are : x coordinate of the beginning, x coordinate of the end, x coordinate of the center of gravity
@@ -114,7 +127,9 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
         it corresponds to the pias file of coordinates
     Lpp: a number
         it is the length between perpendiculars
+
     :returns
+    ----------
     nothing, it writes a file with the data needed """
     hull_form = collection_of_coordinates(coordinates_filename)  # list of the coordinates
     hull_form = hull_form.conversion_coordinate_to_pdstrip(Lpp / 2)

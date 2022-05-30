@@ -3,7 +3,12 @@ import matplotlib.pyplot as plt
 
 
 class Loading:
-    """This Class is very simple because it's a list of mass, indeed the loading is nothing more"""
+    """This Class is very simple because it's a list of mass, indeed the loading is nothing more
+
+    :argument
+    -----------
+    masses: a list
+        it's a list of mass object"""
     def __init__(self):
         self.masses = []
 
@@ -36,19 +41,23 @@ class Loading:
 
     def __append__(self, mass):
         """That functions append a new element to the loading
+
         :argument
-        mass: the new element of the loading"""
+        -----------
+        mass: a mass object
+            the new element of the loading"""
         self.masses.append(mass)
 
     def mass_calculation_for_coordinates(self, x_start, x_end):
         """That function computes the value of the mass between two coordinates of a section
 
         :argument
+        -----------
         x_start: x coordinate of the start of the section
-
         x_end: x_coordinate of the end of the section
 
         :returns
+        -----------
         total_mass: the total mass of the section"""
         number_of_masses = len(self.masses)
         total_mass = 0
@@ -76,16 +85,20 @@ class Loading:
         """That function permits to the user to know the center of gravity for a specific section
 
         :argument
-        x_start: x coordinate of the section
-
-        x_end: x coordinate of the section
+        ----------
+        x_start: a float
+            x coordinate of the section
+        x_end: a float
+            x coordinate of the section
 
         :returns
-        X_CoG: x coordinate of the center of gravity of the section
-
-        Y_CoG: y coordinate of the center of gravity of the section
-
-        Z_CoG: z coordinate of the center of gravity of the section"""
+        -------------
+        X_CoG: a float
+            x coordinate of the center of gravity of the section
+        Y_CoG: a float
+            y coordinate of the center of gravity of the section
+        Z_CoG: a float
+            z coordinate of the center of gravity of the section"""
         total_mass = self.mass_calculation_for_coordinates(x_start, x_end)
         number_of_masses = len(self.masses)
         # initialization of the values
@@ -115,9 +128,12 @@ class Loading:
         """That functions converts every coordinates depending of the PD strip coordinate system
 
         :argument
-        midship: the length of the midship, defined by the length between perpendiculars divide by 2
+        ------------
+        midship: a float
+            the length of the midship, defined by the length between perpendiculars divide by 2
 
         :returns
+        -------------
         It changes the x coordinates by x-midship (the pd strip system the pd strip system places the origin in
         the middle of the boat) and it changes the z coordinate into -z because the z axis is directed downwards"""
         for mass in self.masses:
