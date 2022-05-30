@@ -240,7 +240,7 @@ def mass_calculation(masses_list, xb, xe):
         xbm = masses_list[i].xb  # beginning of the weight
         xem = masses_list[i].x_end  # end of the weight
         xgm = masses_list[i].x_coordinate_CoG
-        mb = masses_list[i].linear_density_beginning
+        mb = masses_list[i].linear_density_start
         me = masses_list[i].linear_density_end
         if xbm < xe and xem > xb:
             rb = np.max([xb, xbm])  # real beginning of the weight for the section

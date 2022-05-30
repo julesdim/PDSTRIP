@@ -118,29 +118,30 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
     nothing, it writes a file with the data needed """
     hull_form = collection_of_coordinates(coordinates_filename)  # list of the coordinates
     hull_form = hull_form.conversion_coordinate_to_pdstrip(Lpp / 2)
-    hull_form = hull_form.correction_of_coordinates()
+    hull_form = hull_form.correction_of_coordinates_for_up()
     hull_form.checking()
     hull_form.plot_one_frame(0)
     hull_form.plotting()
     weight_loading = collection_of_mass(masses_filename)  # list of the masses
-    weight_loading.pdstrip_coordinates(Lpp / 2)
+    weight_loading.pdstrip_coordinates_conversion(Lpp / 2)
     weight_loading.plot_loading(-Lpp / 2, Lpp / 2)
     file = open("data_pdstrip.csv", "w")  # writing of the info in the file "data_pdstrip.csv"
     # for every section we have the backward and the forward
     for i in range(len(hull_form.shape) - 1):
-        back_section = (hull_form.shape[i].x + hull_form.shape[i + 1].x) / 2
+        back_section = (hull_form.shape[i].x_coordinate + hull_form.shape[i + 1].x_coordinate) / 2
         front_section = conversion_for_pdstrip_xaxis(Lpp, Lpp / 2)
-        weight_o_the_current_part = weight_loading.mass_calculation(back_section, front_section)
+        weight_o_the_current_part = weight_loading.mass_calculation_for_coordinates(back_section, front_section)
         try:
             x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG = \
-                weight_loading.calcul_center_of_gravity(back_section, front_section)
+                weight_loading.calcul_center_of_gravity_for_coordinates(back_section, front_section)
         except ZeroDivisionError:
             x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG = \
-                hull_form.center_of_gravity_no_mass(back_section, front_section)
+                hull_form.center_of_gravity_no_mass_for_coordinates(back_section, front_section)
         radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square, xy, yz, xz = \
-            hull_form.calcul_all(back_section, front_section, x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG)
+            hull_form.calcul_every_parameters(back_section, front_section, x_coordinate_CoG, y_coordinate_CoG,
+                                              z_coordinate_CoG)
         data = [weight_o_the_current_part, x_coordinate_CoG, y_coordinate_CoG, \
-                z_coordinate_CoG, radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square,\
+                z_coordinate_CoG, radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square, \
                 xy, yz, xz]
         for input_value in data:
             # we write every input for the section
