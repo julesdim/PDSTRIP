@@ -135,7 +135,7 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
     nothing, it writes a file with the data needed """
     hull_form = collection_of_coordinates(coordinates_filename)  # list of the coordinates
     hull_form = hull_form.conversion_coordinate_to_pdstrip(Lpp / 2)
-    #hull_form = hull_form.correction_of_coordinates_for_up()
+    hull_form = hull_form.correction_of_coordinates_for_up()
     hull_form.checking()
     hull_form.plot_one_frame(0)
     hull_form.plotting()
