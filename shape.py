@@ -3,13 +3,48 @@ import matplotlib.pyplot as plt
 
 
 class Form:
+    """That a class to define the form of the ship, it's a list of frame
+
+    :argument
+    ---------
+    shape: a list
+        it's a list of frame for each axes"""
+
     def __init__(self):
         self.shape = []
 
     def __append__(self, new_frame):
+        """That function appends a new element to the existing list
+
+        :argument
+        -----------
+        new_frame: a frame object
+            it's a new frame defined by a x coordinates and different points for that x
+
+        :returns
+        -----------
+        A new element is added to the existing shape"""
         self.shape.append(new_frame)
 
     def center_of_gravity_no_mass_for_coordinates(self, x_start, x_end):
+        """That function allows the user to know the center of gravity if there's no mass between the x_start and the
+        x_end of the section
+
+        :argument
+        ---------
+        x_start: a float
+            the x coordinate at the start of the section
+        x_end: a float
+            the x coordinate at the end of the section
+
+        :returns
+        -----------
+        x_CoG: a float
+            it corresponds to the center of the volume of the x axis
+        y_CoG: a float
+            it corresponds to the center of the volume of the y axis
+        z_CoG: a float
+            it corresponds to the center of the volume of the z axis"""
         list_y_coordinates = []
         list_z_coordinates = []
         for frame in self.shape:
@@ -21,6 +56,16 @@ class Form:
         return x_CoG, np.mean(list_y_coordinates), np.mean(list_z_coordinates)
 
     def correction_of_coordinates_for_up(self):
+        """That function corrects the coordinates if it misses a point at the maximum z to get the good Z_CoG
+
+        :argument
+        ----------
+        self: a form object
+
+        :returns
+        -----------
+        self: a form object
+            the point needed are added to the current form """
         n = len(self.shape)
         for j in range(n):
             list_z_coordinates_of_frame = []  # all the z of the frame
@@ -30,7 +75,8 @@ class Form:
             for i in range(number_coordinates):
                 list_z_coordinates_of_frame.append(coordinates[i][1])
                 list_y_coordinates_of_frame.append(coordinates[i][0])
-            maximum_z = min(list_z_coordinates_of_frame)  # we save the max of z in pd strip coordinates, that means z to the ground
+            maximum_z = min(list_z_coordinates_of_frame)  # we save the max of z in pd strip coordinates, that means
+            # z to the ground
             maximum_y = max(list_y_coordinates_of_frame)
             for coordinate in coordinates:
                 if coordinate[1] > maximum_z and abs(coordinate[0]) < maximum_y:
@@ -38,19 +84,55 @@ class Form:
         return self
 
     def conversion_coordinate_to_pdstrip(self, midship):
+        """That function changes the x coordinate into the PD strip system of coordinate
+
+        :argument
+        ---------
+        midship: a float
+            that's the middle of the ship, defined by the length between perpendicular divided by 2
+
+        :returns
+        ---------
+        self: a form object
+            that's the same frames but with different x_coordinates, x-midship for every frame"""
         for frame in self.shape:
             frame.x_coordinate = frame.x_coordinate - midship
         return self
 
     def x_coordinates(self):
+        """That functions permits to get each x coordinate of the frame to check if there's no missing frame
+
+        :argument
+        ---------
+        self: a form object
+            the current form
+
+        :returns
+        ---------
+        x_coordinate: a list
+            the list of x coordinate of the frames
+        """
         x_coordinates = []
         for frame in self.shape:
             x_coordinates.append(frame.x)
         return x_coordinates
 
     def calcul_square_inertial_radius_x(self, y_CoG, Z_CoG):
-        """inputs are a list of coord and yg zg coordinates of the center of gravity
-            it returns the square of the inertial radius along x axis, by an average of (y-yg)**2+(z-zg)**2"""
+        """That function calcul the square of the inertial radius relating to the axis through the center of gravity
+        parallel to the x-axis.
+
+        :argument
+        ----------
+        Y_CoG: a float
+            the y coordinate of self, the current form
+        Z_CoG: a float
+            the z coordinate of self, the current form
+
+        :returns
+        -----------
+        rx2: a float
+            this is the average of (y - y_CoG) ** 2 + (z - Z_CoG) ** 2
+        """
         sum = 0  # initialization of the sum
         counter = 0
         for frame in self.shape:
@@ -62,6 +144,21 @@ class Form:
         return sum / counter
 
     def calcul_square_inertial_radius_y(self, X_CoG, z_CoG):
+        """That function calcul the square of the inertial radius relating to the axis through the center of gravity
+                parallel to the y-axis.
+
+                :argument
+                ----------
+                X_CoG: a float
+                    the x coordinate of self, the current form
+                Z_CoG: a float
+                    the z coordinate of self, the current form
+
+                :returns
+                -----------
+                ry2: a float
+                    this is the average of (x - x_CoG) ** 2 + (z - Z_CoG) ** 2
+                """
         sum = 0  # initialization of the sum
         counter = 0
         for frame in self.shape:
@@ -74,8 +171,21 @@ class Form:
         return sum / counter
 
     def calcul_square_inertial_radius_z(self, X_CoG, Y_CoG):
-        """inputs are a list of coord and yg zg coordinates of the center of gravity
-                    it returns the square of the inertial radius along x axis, by an average of (y-yg)**2+(z-zg)**2"""
+        """That function calcul the square of the inertial radius relating to the axis through the center of gravity
+        parallel to the z-axis.
+
+        :argument
+        ----------
+        X_CoG: a float
+            the y coordinate of self, the current form
+        Y_CoG: a float
+            the z coordinate of self, the current form
+
+        :returns
+        -----------
+        rz2: a float
+            this is the average of (x - X_CoG) ** 2 + (y - Y_CoG) ** 2
+        """
         sum = 0  # initialization of the sum
         counter = 0
         for frame in self.shape:
@@ -87,8 +197,19 @@ class Form:
         return sum / counter
 
     def calcul_average_xy(self, X_CoG, Y_CoG):
-        """inputs are a list of coord and xg yg coordinates of the center of gravity
-            it returns the weight weighted average of (x-xg)(y-yg)"""
+        """That function computes the mass weighted average of (x-X_CoG)*(y-Y_CoG) for self, the current form object
+
+        :argument
+        ----------
+        X_CoG: a float
+            the center of gravity of the current form along x-axis
+        Y_CoG: a float
+            the center of gravity of the current form along y-axis
+
+        :returns
+        ----------
+        xy: a float
+            the average of the (x-X_CoG)*(y-Y_CoG) for the current form"""
         sum = 0  # initialization of the sum
         counter = 0
         for frame in self.shape:
@@ -100,6 +221,19 @@ class Form:
         return sum / counter
 
     def calcul_average_yz(self, Y_CoG, Z_CoG):
+        """That function computes the mass weighted average of (y-Y_CoG)*(z-Z_CoG) for self, the current form object
+
+                :argument
+                ----------
+                Y_CoG: a float
+                    the center of gravity of the current form along y-axis
+                Z_CoG: a float
+                    the center of gravity of the current form along z-axis
+
+                :returns
+                ----------
+                yz: a float
+                    the average of the (y-Y_CoG)*(z-Z_CoG) for the current form"""
         sum = 0  # initialization of the sum
         counter = 0
         for frame in self.shape:
@@ -111,6 +245,19 @@ class Form:
         return sum / counter
 
     def calcul_average_xz(self, X_CoG, Z_CoG):
+        """That function computes the mass weighted average of (x-X_CoG)*(z-Z_CoG) for self, the current form object
+
+                :argument
+                ----------
+                X_CoG: a float
+                    the center of gravity of the current form along x-axis
+                Z_CoG: a float
+                    the center of gravity of the current form along z-axis
+
+                :returns
+                ----------
+                xz: a float
+                    the average of the (x-X_CoG)*(z-Z_CoG) for the current form"""
         sum = 0  # initialization of the sum
         counter = 0
         for frame in self.shape:
@@ -122,11 +269,45 @@ class Form:
         return sum / counter
 
     def calcul_every_parameters(self, x_start, x_end, X_CoG, Y_CoG, Z_CoG):
+        """That function creates a new form, it keeps just the frame between a section, from the x_start to the x_end.
+        For that form it computes all the information, the square of the inertial radius for every axis and the
+        average for xy, yz and xz.
+
+        :argument
+        ---------
+        x_start: a float
+            the x coordinate of the start section
+        x_end: a float
+            the x coordinate of the end section
+        X_CoG: a float
+            the x coordinate of the center of gravity for the section
+        Y_CoG: a float
+            the y coordinate of the center of gravity for the section
+        Z_CoG: a float
+            the z coordinate of the center of gravity for the section
+
+        :returns
+        ---------
+        radius_of_inertia_x2: a float
+            the square of the inertial radius relating to the axis through the center of gravity
+        parallel to the x-axis for the section
+        radius_of_inertia_y2: a float
+            the square of the inertial radius relating to the axis through the center of gravity
+        parallel to the y-axis for the section
+        radius_of_inertia_z2: a float
+            the square of the inertial radius relating to the axis through the center of gravity
+        parallel to the z-axis for the section
+        average_xy: a float
+            the mass weighted average of (x-X_CoG)*(y-Y_CoG) for the section
+        average_yz: a float
+            the mass weighted average of (y-Y_CoG)*(z-Z_CoG) for the section
+        average_xz: a float
+            the mass weighted average of (x-X_CoG)*(z-Z_CoG) for the section"""
         list_frame = Form()
         for i in range(len(self.shape)):
             if x_start <= self.shape[i].x_coordinate <= x_end:
                 list_frame.__append__(self.shape[i])
-        radius_of_inertia_x2 = list_frame.calcul_square_inertial_radius_x(X_CoG, Y_CoG)
+        radius_of_inertia_x2 = list_frame.calcul_square_inertial_radius_x(Y_CoG, Z_CoG)
         radius_of_inertia_y2 = list_frame.calcul_square_inertial_radius_y(X_CoG, Z_CoG)
         radius_of_inertia_z2 = list_frame.calcul_square_inertial_radius_z(X_CoG, Y_CoG)
         average_xy = list_frame.calcul_average_xy(X_CoG, Y_CoG)
@@ -135,6 +316,16 @@ class Form:
         return radius_of_inertia_x2, radius_of_inertia_y2, radius_of_inertia_z2, average_xy, average_yz, average_xz
 
     def plotting(self):
+        """That function plots the current form in 3D
+
+        :argument
+        ----------
+        self: a form object
+            the current form
+
+        :returns
+        ------------
+            It prints the current form in 3D"""
         list_x_coordinates = []
         list_y_coordinates = []
         list_z_coordinates = []
@@ -157,6 +348,17 @@ class Form:
         plt.show()
 
     def plot_one_frame(self, x):
+        """That function plots one frame of the form for an x written by the user
+
+        :argument
+        ------------
+        x: a float
+            corresponds to an x coordinate that is part of the frames
+
+        :returns
+        ----------
+        It plots a graph in 2D for one frame
+        """
         list_x_coordinates = []
         list_y_coordinates = []
         for frame in self.shape:
@@ -168,10 +370,22 @@ class Form:
         plt.show()
 
     def checking(self):
+        """That functions checks if there are not 2 same points, with the same coordinates
+
+        :argument
+        ---------
+        self: a form object
+            the current form
+
+        :returns
+        -----------
+        It prints an error message if there are two same coordinates
+        """
         for frame in self.shape:
             for i in range(len(frame.coordinates)):
                 for j in range(len(frame.coordinates)):
-                    if frame.coordinates[i][0] == frame.coordinates[j][0] and frame.coordinates[i][1] == frame.coordinates[j][1] and i != j:
+                    if frame.coordinates[i][0] == frame.coordinates[j][0] and \
+                            frame.coordinates[i][1] == frame.coordinates[j][1] and i != j:
                         if frame.coordinates[i][0]==frame.coordinates[j][0]:
                             print("pb y")
                         if frame.coordinates[i][1]==frame.coordinates[j][0]:

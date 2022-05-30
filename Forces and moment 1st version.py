@@ -2,12 +2,36 @@ import matplotlib.pyplot as plt
 import csv
 
 
-def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed,txt):
-    if txt=="real":
+def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, wave_speed, text):
+    """That function plots 6 different graphs. The 3 firsts are the forces along each axis, the value printed depends on
+     the text, it can be the real part the imaginary or the absolute value
+
+    :argument
+    ---------
+    filename: a text object
+        that's the name of the pdstrip results file
+    wave_frequency: a float
+        that's the value of the frequency of the wave that we want to print the results
+    wave_length: a float
+        that's the value of the length of the wave that we want to print the results
+    wave_angle: a float
+        that's the value of the angle of the wave that we want to print the results
+    wave_speed: a float
+        that's the value of the speed of the wave that we want to print the results
+    text: a text object
+        3 possibilities, "real" to plot the real part
+        "im" to plot the imaginary part
+        "abs" to plot the absolute value"
+
+    :returns
+    --------
+    It plots 6 graphs for the wave selected and for the part selected (real, imaginary or absolute)
+    """
+    if text== "real":
         const=0
-    elif txt=="im":
+    elif text== "im":
         const=1
-    elif txt=="abs":
+    elif text== "abs":
         const=2
     file = open(filename, "r", encoding="utf-8")
     the_lines = csv.reader(file)
@@ -45,7 +69,7 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed,
             ex_speed = float(new[1])
         if new[0] == "Number":
             number_of_section = float(new[3])
-        if ex_wave_length == wave_length and ex_wave_angle == wave_angle and ex_wave_frequency == wave_freq and ex_speed == speed:
+        if ex_wave_length == wave_length and ex_wave_angle == wave_angle and ex_wave_frequency == wave_frequency and ex_speed == wave_speed:
             if new[0] == "Force":
                 x = float(new[1])
                 el_force_x = float(new[2+const])
@@ -78,9 +102,9 @@ def graph_file_for_one_wave(filename, wave_freq, wave_length, wave_angle, speed,
     for i in range(n_all_el):
         plt.plot(les_x, all_el[i])
         if i <= 2:
-            plt.title("Forces along " + list_title[i] + " axis" + " "+ txt)
+            plt.title("Forces along " + list_title[i] + " axis" + " " + text)
         if i > 2:
-            plt.title("Moment along " + list_title[i - 3] + " axis"+ " "+txt)
+            plt.title("Moment along " + list_title[i - 3] + " axis" + " " + text)
         plt.show()
     return
 
