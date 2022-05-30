@@ -609,7 +609,6 @@ class Form:
                     sum /= counter
         return sum
 
-
     def calcul_every_parameters_mass_average(self, x_start, x_end, X_CoG, Y_CoG, Z_CoG, weightloading):
         """That function creates a new form, it keeps just the frame between a section, from the x_start to the x_end.
         For that form it computes all the information, the square of the inertial radius for every axis and the
@@ -649,9 +648,9 @@ class Form:
                                                                                  x_end)
         radius_of_inertia_y2 = self.calcul_square_inertial_radius_y_mass_average(weightloading, X_CoG, Z_CoG, x_start,
                                                                                  x_end)
-        radius_of_inertia_z2 = self.calcul_square_inertial_radius_z_mass_average(weightloading, X_CoG, Z_CoG, x_start,
+        radius_of_inertia_z2 = self.calcul_square_inertial_radius_z_mass_average(weightloading, X_CoG, Y_CoG, x_start,
                                                                                  x_end)
-        average_xy = self.calcul_xy_mass_average(weightloading, X_CoG, Y_CoG,x_start,x_end)
-        average_yz = self.calcul_yz_mass_average(weightloading, Y_CoG, Z_CoG,x_start,x_end)
-        average_xz = self.calcul_xz_mass_average(weightloading, X_CoG, Z_CoG,x_start,x_end)
+        average_xy = self.calcul_xy_mass_average(weightloading, X_CoG, Y_CoG, x_start, x_end)
+        average_yz = self.calcul_yz_mass_average(weightloading, Y_CoG, Z_CoG, x_start, x_end)
+        average_xz = self.calcul_xz_mass_average(weightloading, X_CoG, Z_CoG, x_start, x_end)
         return radius_of_inertia_x2, radius_of_inertia_y2, radius_of_inertia_z2, average_xy, average_yz, average_xz

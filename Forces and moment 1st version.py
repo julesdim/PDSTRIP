@@ -27,12 +27,12 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
     --------
     It plots 6 graphs for the wave selected and for the part selected (real, imaginary or absolute)
     """
-    if text== "real":
-        constant=0
-    elif text== "imaginary":
-        constant=1
-    elif text== "absolute":
-        constant=2
+    if text == "real":
+        constant = 0
+    elif text == "imaginary":
+        constant = 1
+    elif text == "absolute":
+        constant = 2
     file = open(filename, "r", encoding="utf-8")
     the_lines = csv.reader(file)
     line_counter = 0
@@ -53,7 +53,6 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
             line_formatted = line[0].strip().split()
         except IndexError:
             pass
-        print(line_formatted)
         if len(line_formatted) == 0:
             line_formatted = ["error", "error", "error"]
         if line_formatted[0] == "wave" and line_formatted[2] == "frequency":
@@ -73,9 +72,9 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
                 example_wave_frequency == wave_frequency and example_wave_speed == wave_speed:
             if line_formatted[0] == "Force":
                 x_coordinate = float(line_formatted[1])
-                element_force_x = float(line_formatted[2+constant])
-                element_force_y = float(line_formatted[5+constant])
-                element_force_z = float(line_formatted[8+constant])
+                element_force_x = float(line_formatted[2 + constant])
+                element_force_y = float(line_formatted[5 + constant])
+                element_force_z = float(line_formatted[8 + constant])
                 forces_along_x.append(element_force_x)
                 forces_along_y.append(element_force_y)
                 forces_along_z.append(element_force_z)
@@ -85,9 +84,9 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
                 break
             if line_formatted[0] == "Moment":
                 line_counter += 1
-                element_moment_x = float(line_formatted[1+constant])
-                element_moment_y = float(line_formatted[4+constant])
-                element_moment_z = float(line_formatted[7+constant])
+                element_moment_x = float(line_formatted[1 + constant])
+                element_moment_y = float(line_formatted[4 + constant])
+                element_moment_z = float(line_formatted[7 + constant])
                 moment_along_x.append(element_moment_x)
                 moment_along_y.append(element_moment_y)
                 moment_along_z.append(element_moment_z)
@@ -110,4 +109,4 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok", 0.1, 6161.7, 0, 0,"real")
+graph_file_for_one_wave("pdstrip.out.ok", 0.1, 6161.7, 0, 0, "imaginary")

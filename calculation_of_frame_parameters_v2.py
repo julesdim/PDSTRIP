@@ -40,25 +40,27 @@ def collection_of_coordinates(filename):
     line_counter = 0
     start_line_of_the_frame = 0
     end_line_of_the_frame = 1000
-    boolean_for_beginning_of_the_frame = True  # we can know if we are at the beginning of the frame to get the x coordinate of the frame
+    boolean_for_beginning_of_the_frame = True
+    # we can know if we are at the beginning of the frame to get the x coordinate of the frame
     form_of_the_ship = shape.Form()  # initialisation of the list of coordinates
     for line in the_lines:
-        line_formatted = line[0].strip().split()  # formating the line
+        line_formatted = line[0].strip().split()  # formatting the line
         if line_counter == 0:
             total_number_of_frame = float(line_formatted[0])  # to know the number of frame
         if line_counter != 0 and len(line_formatted) == 1 and boolean_for_beginning_of_the_frame:
-            x_coordinate = (float(line_formatted[
-                                      0]))  # if there is just one coordinate, it is the position along x axis, if beg_frame==True
+            x_coordinate = (float(line_formatted[0]))
+            # if there is just one coordinate, it is the position along x-axis, if beg_frame==True
             start_line_of_the_frame = line_counter
             current_frame = fr.Frames(x_coordinate)
-            boolean_for_beginning_of_the_frame = False  # As we just passed the beg of the frame, next is false
+            boolean_for_beginning_of_the_frame = False  # As we just passed the start of the frame, next is false
         if line_counter != 0 and len(line_formatted) == 3:
             y_coordinate = (float(line_formatted[0]))
             z_coordinate = (-float(line_formatted[1]))
             current_frame.__append__((y_coordinate, z_coordinate))  # we append to the list
             if y_coordinate != 0:
                 current_frame.__append__((-y_coordinate, z_coordinate))
-            boolean_for_beginning_of_the_frame = True  # the next time len(new)==1 it will be the beginning of a new frame
+            boolean_for_beginning_of_the_frame = True
+            # the next time len(new)==1 it will be the beginning of a new frame
         if len(line_formatted) == 1 and line_counter == start_line_of_the_frame + 1:
             number_points_of_the_current_frame = int(line_formatted[0])
             end_line_of_the_frame = line_counter + number_points_of_the_current_frame
@@ -154,9 +156,9 @@ def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp
                 hull_form.center_of_gravity_no_mass_for_coordinates(back_section, front_section)
         radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square, xy, yz, xz = \
             hull_form.calcul_every_parameters_mass_average(back_section, front_section, x_coordinate_CoG,
-                                                           y_coordinate_CoG,z_coordinate_CoG, weight_loading)
-        data = [weight_of_the_current_part, x_coordinate_CoG, y_coordinate_CoG, \
-                z_coordinate_CoG, radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square, \
+                                                           y_coordinate_CoG, z_coordinate_CoG, weight_loading)
+        data = [weight_of_the_current_part, x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG,
+                radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square,
                 xy, yz, xz]
         for input_value in data:
             # we write every input for the section
