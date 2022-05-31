@@ -427,6 +427,7 @@ class Form:
                         z = coord[1]
                         counter += 1
                         sum += (y - Y_Cog) ** 2 + (z - Z_Cog) ** 2
+                    sum=0
                     sum /= counter
         return sum
 
@@ -600,6 +601,7 @@ class Form:
                 if total_mass != 0:
                     for coord in self.shape[i].coordinates:
                         z = coord[1]
+                        counter+=1
                         sum += ((x - X_Cog) * (z - Z_Cog)) * real_mass / total_mass
                 if total_mass == 0:
                     for coord in self.shape[i].coordinates:
