@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import csv
-
+import numpy as np
 
 def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, wave_speed, text):
     """That function plots 6 different graphs. The 3 firsts are the forces along each axis, the value printed depends on
@@ -90,6 +90,13 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
                 moment_along_x.append(element_moment_x)
                 moment_along_y.append(element_moment_y)
                 moment_along_z.append(element_moment_z)
+
+    # list_x_coordinates=np.array(list_x_coordinates)
+    # forces_along_z=np.array(forces_along_z)
+    # moment_along_y=np.array(moment_along_y)
+    # forces_along_z=(150-list_x_coordinates)*forces_along_z
+    # print(100-list_x_coordinates,"les x")
+    # moment_along_y=(110-list_x_coordinates)*moment_along_y
     print(forces_along_x)
     print(forces_along_y)
     print(forces_along_z)
