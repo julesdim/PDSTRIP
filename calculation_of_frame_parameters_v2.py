@@ -133,9 +133,6 @@ def Writing_of_the_PDstrip_input_file(masses_filename: str, coordinates_filename
     :returns
     ----------
     nothing, it writes a file with the data needed """
-    # list_xg=[]
-    # list_yg=[]
-    # list_zg=[]
     hull_form = collection_of_coordinates(coordinates_filename)  # list of the coordinates
     hull_form = hull_form.conversion_coordinate_to_pdstrip(Lpp / 2)
     hull_form = hull_form.correction_of_coordinates_for_up()
@@ -157,9 +154,6 @@ def Writing_of_the_PDstrip_input_file(masses_filename: str, coordinates_filename
         except ZeroDivisionError:
             x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG = \
                 hull_form.center_of_gravity_no_mass_for_coordinates(back_section, front_section)
-        # list_xg.append(x_coordinate_CoG)
-        # list_yg.append(y_coordinate_CoG)
-        # list_zg.append(z_coordinate_CoG)
         radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square, xy, yz, xz = \
             hull_form.calcul_every_parameters_mass_average(back_section, front_section, x_coordinate_CoG,
                                                            y_coordinate_CoG, z_coordinate_CoG, weight_loading)
@@ -170,12 +164,6 @@ def Writing_of_the_PDstrip_input_file(masses_filename: str, coordinates_filename
             # we write every input for the section
             file.write(str(input_value) + " ")
         file.write("\n")
-    # fig = plt.figure()
-    # ax = fig.gca(projection="3d")
-    # ax.scatter(list_xg, list_yg, list_zg, label="courbe", marker='d')
-    # ax.set_title('test')
-    # plt.tight_layout()
-    # plt.show()
     file.close()  # total weight is checked
     return
 
