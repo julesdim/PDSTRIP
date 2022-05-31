@@ -71,7 +71,7 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
         if example_wave_length == wave_length and example_wave_angle == wave_angle and \
                 example_wave_frequency == wave_frequency and example_wave_speed == wave_speed:
             if line_formatted[0] == "Force":
-                x_coordinate = float(line_formatted[1])+50
+                x_coordinate = float(line_formatted[1])+135/2
                 element_force_x = float(line_formatted[2 + constant])
                 element_force_y = float(line_formatted[5 + constant])
                 element_force_z = float(line_formatted[8 + constant])
@@ -108,6 +108,7 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
     n_all_graph = len(all_graph)
     for i in range(n_all_graph):
         plt.plot(list_x_coordinates, all_graph[i])
+        plt.grid()
         if i <= 2:
             plt.title("Forces along " + list_title[i] + " axis" + " " + text)
         if i > 2:
@@ -116,4 +117,4 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok", 0.9, 76.07, 0, 0, "real")
+graph_file_for_one_wave("pdstrip.out.ok", 0.248, 1000, 0, 0, "real")

@@ -169,7 +169,7 @@ def Writing_of_the_PDstrip_input_file(masses_filename: str, coordinates_filename
 
 
 masses1 = "masses1.csv"
-shape1 = "barge_standaard_pias_text_file.txt"
+shape1 = "oural_standaard_pias_text_file.txt"
 masses2 = "masses.csv"
 shape2 = "correct_frames_of_oural.asc"
-Writing_of_the_PDstrip_input_file(masses1, shape1, 100)
+Writing_of_the_PDstrip_input_file(masses2, shape2, 135)
