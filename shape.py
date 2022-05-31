@@ -418,13 +418,11 @@ class Form:
                     real_end = min([x_end_part, x_end])
                 real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
                 if total_mass != 0:
-                    # for coord in self.shape[i].coordinates:
-                    #     y = coord[0]
-                    #     z = coord[1]
-                    #     sum += ((y - Y_Cog) ** 2 + (z - Z_Cog) ** 2) * real_mass / total_mass
-                    shape_act=shape.Form()
-                    shape_act.__append__(self.shape[i])
-                    sum+=shape_act.calcul_square_inertial_radius_x(Y_Cog,Z_Cog)*real_mass/total_mass
+                    number_of_point=len(self.shape[i].coordinates)
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        z = coord[1]
+                        sum += ((y - Y_Cog) ** 2 + (z - Z_Cog) ** 2) * (real_mass/number_of_point) / total_mass
                 if total_mass == 0:
                     for coord in self.shape[i].coordinates:
                         y = coord[0]
@@ -460,12 +458,10 @@ class Form:
                     real_end = min([x_end_part, x_end])
                 real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
                 if total_mass != 0:
-                    # for coord in self.shape[i].coordinates:
-                    #     z = coord[1]
-                    #     sum += ((x - X_Cog) ** 2 + (z - Z_Cog) ** 2) * real_mass / total_mass
-                    shape_act = shape.Form()
-                    shape_act.__append__(self.shape[i])
-                    sum += shape_act.calcul_square_inertial_radius_y(X_Cog, Z_Cog) * real_mass / total_mass
+                    number_of_point = len(self.shape[i].coordinates)
+                    for coord in self.shape[i].coordinates:
+                        z = coord[1]
+                        sum += ((x - X_Cog) ** 2 + (z - Z_Cog) ** 2) * (real_mass/number_of_point) / total_mass
                 if total_mass == 0:
                     for coord in self.shape[i].coordinates:
                         z = coord[1]
@@ -500,12 +496,10 @@ class Form:
                     real_end = min([x_end_part, x_end])
                 real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
                 if total_mass != 0:
-                    # for coord in self.shape[i].coordinates:
-                    #     y = coord[0]
-                    #     sum += ((x - X_Cog) ** 2 + (y - Y_Cog) ** 2) * real_mass / total_mass
-                    shape_act = shape.Form()
-                    shape_act.__append__(self.shape[i])
-                    sum += shape_act.calcul_square_inertial_radius_z(X_Cog, Y_Cog) * real_mass / total_mass
+                    number_of_point = len(self.shape[i].coordinates)
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        sum += ((x - X_Cog) ** 2 + (y - Y_Cog) ** 2) * (real_mass/number_of_point) / total_mass
                 if total_mass == 0:
                     for coord in self.shape[i].coordinates:
                         y = coord[0]
@@ -540,12 +534,10 @@ class Form:
                     real_end = min([x_end_part, x_end])
                 real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
                 if total_mass != 0:
-                    # for coord in self.shape[i].coordinates:
-                    #     y = coord[0]
-                    #     sum += ((x - X_Cog) * (y - Y_Cog)) * real_mass / total_mass
-                    shape_act = shape.Form()
-                    shape_act.__append__(self.shape[i])
-                    sum += shape_act.calcul_average_xy(X_Cog, Y_Cog) * real_mass / total_mass
+                    number_of_point = len(self.shape[i].coordinates)
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        sum += ((x - X_Cog) * (y - Y_Cog)) * (real_mass/number_of_point) / total_mass
                 if total_mass == 0:
                     for coord in self.shape[i].coordinates:
                         y = coord[0]
@@ -577,13 +569,11 @@ class Form:
                     real_end = min([x_end_part, x_end])
                 real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
                 if total_mass != 0:
-                    # for coord in self.shape[i].coordinates:
-                    #     y = coord[0]
-                    #     z = coord[1]
-                    #     sum += ((y - Y_Cog) * (z - Z_Cog)) * real_mass / total_mass
-                    shape_act = shape.Form()
-                    shape_act.__append__(self.shape[i])
-                    sum += shape_act.calcul_average_yz(Y_Cog, Z_Cog) * real_mass / total_mass
+                    number_of_point = len(self.shape[i].coordinates)
+                    for coord in self.shape[i].coordinates:
+                        y = coord[0]
+                        z = coord[1]
+                        sum += ((y - Y_Cog) * (z - Z_Cog)) * (real_mass/number_of_point) / total_mass
                 if total_mass == 0:
                     for coord in self.shape[i].coordinates:
                         y = coord[0]
@@ -619,14 +609,11 @@ class Form:
                     real_end = min([x_end_part, x_end])
                 real_mass = weightloading.mass_calculation_for_coordinates(real_start, real_end)
                 if total_mass != 0:
-                    shape_act=shape.Form()
-                    shape_act.__append__(self.shape[i])
-                    xz=shape_act.calcul_average_xz(X_Cog,Z_Cog)
-                    # for coord in self.shape[i].coordinates:
-                    #     z = coord[1]
-                    #     counter+=1
-                    #     sum += ((x - X_Cog) * (z - Z_Cog)) * real_mass / total_mass
-                    sum+=xz*real_mass/total_mass
+                    number_of_point=len(self.shape[i].coordinates)
+                    for coord in self.shape[i].coordinates:
+                        z = coord[1]
+                        counter+=1
+                        sum += ((x - X_Cog) * (z - Z_Cog)) * (real_mass/number_of_point) / total_mass
                 if total_mass == 0:
                     for coord in self.shape[i].coordinates:
                         z = coord[1]
