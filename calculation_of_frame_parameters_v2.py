@@ -5,7 +5,7 @@ import frames as fr
 import loading as ld
 
 
-def conversion_for_pdstrip_xaxis(x, midship):
+def conversion_for_pdstrip_xaxis(x: float, midship: float):
     """That functions converts a x coordinate with an origin at the PPAR into a coordinate with an origin at
      middle ship
 
@@ -23,7 +23,7 @@ def conversion_for_pdstrip_xaxis(x, midship):
     return x - midship
 
 
-def collection_of_coordinates(filename):
+def collection_of_coordinates(filename: str):
     """That functions read a Pias file of coordinates, and it reads every coordinate to return a shape object
 
     :parameter
@@ -71,7 +71,7 @@ def collection_of_coordinates(filename):
     return form_of_the_ship
 
 
-def collection_of_mass(filename):
+def collection_of_mass(filename: str):
     """That functions reads a csv file and collects all the information, the weight in ton, the beginning of the weight,
     the end of the weight, the center of gravity with x coordinate, y and z, then it defines the weight per meter at the
     beginning of the weight repartition and the weight per meter at the end of the weight repartition (along the x axis), the
@@ -114,7 +114,7 @@ def collection_of_mass(filename):
     return weight_loading
 
 
-def Writing_of_the_PDstrip_input_file(masses_filename, coordinates_filename, Lpp):
+def Writing_of_the_PDstrip_input_file(masses_filename: str, coordinates_filename: str, Lpp: float):
     """That function writes a file titled data_pdstrip.csv with all the input data from the frames that needs the
     PDstrip program, that function needs the loading informations, the shape of the ship, and the length between
     perpendiculars.

@@ -71,7 +71,7 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
         if example_wave_length == wave_length and example_wave_angle == wave_angle and \
                 example_wave_frequency == wave_frequency and example_wave_speed == wave_speed:
             if line_formatted[0] == "Force":
-                x_coordinate = float(line_formatted[1])
+                x_coordinate = float(line_formatted[1])+50
                 element_force_x = float(line_formatted[2 + constant])
                 element_force_y = float(line_formatted[5 + constant])
                 element_force_z = float(line_formatted[8 + constant])
