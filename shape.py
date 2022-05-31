@@ -83,7 +83,11 @@ class Form:
             # z to the ground
             maximum_y = max(list_y_coordinates_of_frame)
             for coordinate in coordinates:
-                if coordinate[1] < maximum_z and abs(coordinate[0]) < maximum_y:
+                nb_point_coord=0
+                for coordinate2 in coordinates:
+                    if coordinate2[0]==coordinate[0]:
+                        nb_point_coord+=1
+                if coordinate[1] < maximum_z and abs(coordinate[0]) < maximum_y and nb_point_coord<2:
                     self.shape[j].__append__((coordinate[0], maximum_z))
         return self
 
