@@ -465,6 +465,7 @@ class Form:
                         counter += 1
                         sum += (x - X_Cog) ** 2 + (z - Z_Cog) ** 2
                     sum /= counter
+                sum=0
         return sum
 
     def calcul_square_inertial_radius_z_mass_average(self, weightloading, X_Cog, Y_Cog, x_start, x_end):
@@ -501,6 +502,7 @@ class Form:
                         counter += 1
                         sum += (x - X_Cog) ** 2 + (y - Y_Cog) ** 2
                     sum /= counter
+                    sum=0
         return sum
 
     def calcul_xy_mass_average(self, weightloading, X_Cog, Y_Cog, x_start, x_end):
@@ -537,6 +539,7 @@ class Form:
                         counter += 1
                         sum += (x - X_Cog) * (y - Y_Cog)
                     sum /= counter
+                sum=0
         return sum
 
     def calcul_yz_mass_average(self, weightloading, Y_Cog, Z_Cog, x_start, x_end):
@@ -572,6 +575,7 @@ class Form:
                         counter += 1
                         sum += (y - Y_Cog) * (z - Z_Cog)
                     sum /= counter
+                    sum=0
         return sum
 
     def calcul_xz_mass_average(self, weightloading, X_Cog, Z_Cog, x_start, x_end):
@@ -609,6 +613,7 @@ class Form:
                         counter += 1
                         sum += (x - X_Cog) * (z - Z_Cog)
                     sum /= counter
+                    sum=0
         return sum
 
     def calcul_every_parameters_mass_average(self, x_start, x_end, X_CoG, Y_CoG, Z_CoG, weightloading):
