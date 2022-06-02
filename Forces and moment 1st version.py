@@ -35,6 +35,7 @@ def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: f
     elif text == "absolute":
         constant = 2
     file = open(filename, "r", encoding="utf-8")
+    file_writed = open("data_results.csv", "w")
     the_lines = csv.reader(file)
     line_counter = 0
     list_x_coordinates = []
@@ -108,6 +109,11 @@ def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: f
     all_graph = [forces_along_x, forces_along_y, forces_along_z, moment_along_x, moment_along_y, moment_along_z]
     list_title = ["x", "y", "z"]
     n_all_graph = len(all_graph)
+    for i in range (len(list_x_coordinates)):
+        file_writed.write(str(list_x_coordinates[i]))
+        for graph in all_graph:
+            file_writed.write(str(graph[i]) + " ")
+        file_writed.write("\n")
     for i in range(n_all_graph):
         plt.plot(list_x_coordinates, all_graph[i])
         plt.grid()
