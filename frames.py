@@ -15,7 +15,7 @@ class Frames:
         self.x_coordinate = x
         self.coordinates = []
 
-    def __append__(self, new_coordinate):
+    def __append__(self, new_coordinate: tuple):
         """That function appends a new point for a frame with the same x
 
         :parameter

@@ -13,7 +13,7 @@ class Loading:
     def __init__(self):
         self.masses = []
 
-    def plot_loading(self, x_start, x_end):
+    def plot_loading(self, x_start: float, x_end: float):
         """That function permits to the user to print the weightloading, for a list of weight, and with the
         boundaries of the ship
 
@@ -40,7 +40,7 @@ class Loading:
         plt.show()
         return
 
-    def __append__(self, mass):
+    def __append__(self, mass:float):
         """That functions append a new element to the loading
 
         :argument
@@ -49,7 +49,7 @@ class Loading:
             the new element of the loading"""
         self.masses.append(mass)
 
-    def mass_calculation_for_coordinates(self, x_start, x_end):
+    def mass_calculation_for_coordinates(self, x_start: float, x_end: float):
         """That function computes the value of the mass between two coordinates of a section
 
         :argument
@@ -82,7 +82,7 @@ class Loading:
                     total_mass += (real_end - real_start) * real_linear_density_start
         return total_mass
 
-    def calcul_center_of_gravity_for_coordinates(self, x_start, x_end):
+    def calcul_center_of_gravity_for_coordinates(self, x_start: float, x_end: float):
         """That function permits to the user to know the center of gravity for a specific section
 
         :argument
@@ -126,7 +126,7 @@ class Loading:
                 Z_CoG += real_mass * self.masses[i].z_coordinate_CoG
         return X_CoG / total_mass, Y_CoG / total_mass, Z_CoG / total_mass
 
-    def pdstrip_coordinates_conversion(self, midship):
+    def pdstrip_coordinates_conversion(self, midship: float):
         """That functions converts every coordinates depending of the PD strip coordinate system
 
         :argument

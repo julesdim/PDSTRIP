@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import csv
 import numpy as np
 
-def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, wave_speed, text):
+def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: float, wave_angle: float,
+                            wave_speed: float, text: str):
     """That function plots 6 different graphs. The 3 firsts are the forces along each axis, the value printed depends on
      the text, it can be the real part the imaginary or the absolute value
 
@@ -95,9 +96,9 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
     # list_x_coordinates=np.array(list_x_coordinates)
     # forces_along_z=np.array(forces_along_z)
     # moment_along_y=np.array(moment_along_y)
-    # forces_along_z=(150-list_x_coordinates)*forces_along_z
+    # forces_along_z=(140-list_x_coordinates)*forces_along_z
     # print(100-list_x_coordinates,"les x")
-    # moment_along_y=(110-list_x_coordinates)*moment_along_y
+    # moment_along_y=(115-list_x_coordinates)*moment_along_y
     # print(forces_along_x)
     # print(forces_along_y)
     # print(forces_along_z)

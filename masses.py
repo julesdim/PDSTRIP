@@ -25,8 +25,8 @@ class Mass:
         linear density of the mass at x_end
     """
 
-    def __init__(self, weight, x_start, x_end, x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG,
-                 linear_density_start, linear_density_end):
+    def __init__(self, weight: float, x_start: float, x_end: float, x_coordinate_CoG: float, y_coordinate_CoG: float,
+                 z_coordinate_CoG: float, linear_density_start: float, linear_density_end: float):
         self.weight = weight
         self.x_start = x_start
         self.x_end = x_end
@@ -63,7 +63,7 @@ class Mass:
             sum_y += list_of_y_coordinates[i]
         return sum / sum_y
 
-    def calcul_x_coordinate_CoG_for_coordinates(self, x_start_part, x_end_part):
+    def calcul_x_coordinate_CoG_for_coordinates(self, x_start_part: float, x_end_part: float):
         """That function permits to know the center of gravity for a section of the mass in function of the
         linear density's formula
 
@@ -93,7 +93,7 @@ class Mass:
             print(list_of_y_coordinates)
         return sum / sum_y
 
-    def calcul_linear_density_for_coordinates(self, x_start_part, x_end_part):
+    def calcul_linear_density_for_coordinates(self, x_start_part: float, x_end_part: float):
         """That function permits to know the value of the linear density at the start part and at the end part to
         compute the linear density
 
@@ -120,10 +120,10 @@ class Mass:
         linear_density_at_x_start_part = linear_density_start + coefficient_of_the_line * (x_start_part -
                                                                                            x_start_of_the_mass)
         linear_density_at_x_end_part = linear_density_start + coefficient_of_the_line * (
-                    x_end_part - x_start_of_the_mass)
+                x_end_part - x_start_of_the_mass)
         return linear_density_at_x_start_part, linear_density_at_x_end_part
 
-    def calcul_xg_not_the_mid(self, eps=0.00001):
+    def calcul_xg_not_the_mid(self, eps: float = 0.00001):
         """That functions permits to compute the new value of linear density, indeed at the beginning the linear density
         is defined equal at the beginning and at the end.
 

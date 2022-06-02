@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import frames
+import loading
 import loading as ld
 import shape
 
@@ -17,7 +18,7 @@ class Form:
     def __init__(self):
         self.shape = []
 
-    def __append__(self, new_frame):
+    def __append__(self, new_frame: frames.Frames):
         """That function appends a new element to the existing list
 
         :argument
@@ -30,7 +31,7 @@ class Form:
         A new element is added to the existing shape"""
         self.shape.append(new_frame)
 
-    def center_of_gravity_no_mass_for_coordinates(self, x_start, x_end):
+    def center_of_gravity_no_mass_for_coordinates(self, x_start: float, x_end: float):
         """That function allows the user to know the center of gravity if there's no mass between the x_start and the
         x_end of the section
 
@@ -91,7 +92,7 @@ class Form:
                     self.shape[j].__append__((coordinate[0], maximum_z))
         return self
 
-    def conversion_coordinate_to_pdstrip(self, midship):
+    def conversion_coordinate_to_pdstrip(self, midship: float):
         """That function changes the x coordinate into the PD strip system of coordinate
 
         :argument
@@ -125,7 +126,7 @@ class Form:
             x_coordinates.append(frame.x)
         return x_coordinates
 
-    def calcul_square_inertial_radius_x(self, y_CoG, Z_CoG):
+    def calcul_square_inertial_radius_x(self, y_CoG: float, Z_CoG: float):
         """That function calcul the square of the inertial radius relating to the axis through the center of gravity
         parallel to the x-axis.
 
@@ -151,7 +152,7 @@ class Form:
                 sum += (y - y_CoG) ** 2 + (z - Z_CoG) ** 2  # we add the value for the actual point
         return sum / counter
 
-    def calcul_square_inertial_radius_y(self, X_CoG, z_CoG):
+    def calcul_square_inertial_radius_y(self, X_CoG: float, z_CoG: float):
         """That function calcul the square of the inertial radius relating to the axis through the center of gravity
                 parallel to the y-axis.
 
@@ -178,7 +179,7 @@ class Form:
         # we return an average
         return sum / counter
 
-    def calcul_square_inertial_radius_z(self, X_CoG, Y_CoG):
+    def calcul_square_inertial_radius_z(self, X_CoG: float, Y_CoG: float):
         """That function calcul the square of the inertial radius relating to the axis through the center of gravity
         parallel to the z-axis.
 
@@ -204,7 +205,7 @@ class Form:
                 sum += (x - X_CoG) ** 2 + (y - Y_CoG) ** 2  # we add the value for the actual point
         return sum / counter
 
-    def calcul_average_xy(self, X_CoG, Y_CoG):
+    def calcul_average_xy(self, X_CoG: float, Y_CoG: float):
         """That function computes the mass weighted average of (x-X_CoG)*(y-Y_CoG) for self, the current form object
 
         :argument
@@ -228,7 +229,7 @@ class Form:
                 sum += (x - X_CoG) * (y - Y_CoG)  # we add the value for the actual point
         return sum / counter
 
-    def calcul_average_yz(self, Y_CoG, Z_CoG):
+    def calcul_average_yz(self, Y_CoG: float, Z_CoG: float):
         """That function computes the mass weighted average of (y-Y_CoG)*(z-Z_CoG) for self, the current form object
 
                 :argument
@@ -252,7 +253,7 @@ class Form:
                 sum += (y - Y_CoG) * (z - Z_CoG)  # we add the value for the actual point
         return sum / counter
 
-    def calcul_average_xz(self, X_CoG, Z_CoG):
+    def calcul_average_xz(self, X_CoG: float, Z_CoG: float):
         """That function computes the mass weighted average of (x-X_CoG)*(z-Z_CoG) for self, the current form object
 
                 :argument
@@ -276,7 +277,8 @@ class Form:
                 sum += (x - X_CoG) * (z - Z_CoG)  # we add the value for the actual point
         return sum / counter
 
-    def calcul_every_parameters(self, x_start, x_end, X_CoG, Y_CoG, Z_CoG, weightloading):
+    def calcul_every_parameters(self, x_start: float, x_end: float, X_CoG: float, Y_CoG: float, Z_CoG: float,
+                                weightloading: loading.Loading):
         """That function creates a new form, it keeps just the frame between a section, from the x_start to the x_end.
         For that form it computes all the information, the square of the inertial radius for every axis and the
         average for xy, yz and xz.
@@ -356,7 +358,7 @@ class Form:
         plt.tight_layout()
         plt.show()
 
-    def plot_one_frame(self, x):
+    def plot_one_frame(self, x: float):
         """That function plots one frame of the form for an x written by the user
 
         :argument
@@ -400,7 +402,8 @@ class Form:
                         if frame.coordinates[i][1] == frame.coordinates[j][0]:
                             print("pb x")
 
-    def calcul_square_inertial_radius_x_mass_average(self, weightloading, Y_Cog, Z_Cog, x_start, x_end):
+    def calcul_square_inertial_radius_x_mass_average(self, weightloading: loading.Loading, Y_Cog: float, Z_Cog: float,
+                                                     x_start: float, x_end: float):
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -436,7 +439,8 @@ class Form:
                     sum /= counter
         return sum
 
-    def calcul_square_inertial_radius_y_mass_average(self, weightloading, X_Cog, Z_Cog, x_start, x_end):
+    def calcul_square_inertial_radius_y_mass_average(self, weightloading: loading.Loading, X_Cog: float, Z_Cog: float,
+                                                     x_start: float, x_end: float):
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -473,7 +477,8 @@ class Form:
                     sum /= counter
         return sum
 
-    def calcul_square_inertial_radius_z_mass_average(self, weightloading, X_Cog, Y_Cog, x_start, x_end):
+    def calcul_square_inertial_radius_z_mass_average(self, weightloading: loading.Loading,
+                                                     X_Cog: float, Y_Cog: float, x_start: float, x_end: float):
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -510,7 +515,8 @@ class Form:
                     sum /= counter
         return sum
 
-    def calcul_xy_mass_average(self, weightloading, X_Cog, Y_Cog, x_start, x_end):
+    def calcul_xy_mass_average(self, weightloading: loading.Loading, X_Cog: float, Y_Cog: float, x_start: float,
+                               x_end: float):
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -547,7 +553,8 @@ class Form:
                     sum /= counter
         return sum
 
-    def calcul_yz_mass_average(self, weightloading, Y_Cog, Z_Cog, x_start, x_end):
+    def calcul_yz_mass_average(self, weightloading: loading.Loading, Y_Cog: float, Z_Cog: float, x_start: float,
+                               x_end: float):
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -583,7 +590,8 @@ class Form:
                     sum /= counter
         return sum
 
-    def calcul_xz_mass_average(self, weightloading, X_Cog, Z_Cog, x_start, x_end):
+    def calcul_xz_mass_average(self, weightloading: loading.Loading, X_Cog: float, Z_Cog: float, x_start: float,
+                               x_end: float):
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -621,7 +629,8 @@ class Form:
                     sum /= counter
         return sum
 
-    def calcul_every_parameters_mass_average(self, x_start, x_end, X_CoG, Y_CoG, Z_CoG, weightloading):
+    def calcul_every_parameters_mass_average(self, x_start: float, x_end: float, X_CoG: float, Y_CoG: float,
+                                             Z_CoG: float, weightloading: loading.Loading):
         """That function creates a new form, it keeps just the frame between a section, from the x_start to the x_end.
         For that form it computes all the information, the square of the inertial radius for every axis and the
         average for xy, yz and xz.
