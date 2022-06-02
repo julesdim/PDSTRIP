@@ -61,7 +61,7 @@ def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: f
         if line_formatted[0] == "wave" and line_formatted[1] == "length":
             try:
                 example_wave_length = float(line_formatted[2])
-                if example_wave_length==900:
+                if example_wave_length==1000:
                     print(example_wave_frequency)
             except:
                 example_wave_length = 100000
@@ -119,4 +119,4 @@ def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: f
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok", 0.262, 900, 0, 0, "real")
+graph_file_for_one_wave("pdstrip.out.ok", 0.7, 125.75, 0, 0, "real")
