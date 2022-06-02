@@ -206,7 +206,7 @@ class Form:
         return sum / counter
 
     def calcul_average_xy(self, X_CoG: float, Y_CoG: float):
-        """That function computes the mass weighted average of (x-X_CoG)*(y-Y_CoG) for self, the current form object
+        """That function computes the average of (x-X_CoG)*(y-Y_CoG) for self, the current form object
 
         :argument
         ----------
@@ -230,7 +230,7 @@ class Form:
         return sum / counter
 
     def calcul_average_yz(self, Y_CoG: float, Z_CoG: float):
-        """That function computes the mass weighted average of (y-Y_CoG)*(z-Z_CoG) for self, the current form object
+        """That function computes the average of (y-Y_CoG)*(z-Z_CoG) for self, the current form object
 
                 :argument
                 ----------
@@ -254,7 +254,7 @@ class Form:
         return sum / counter
 
     def calcul_average_xz(self, X_CoG: float, Z_CoG: float):
-        """That function computes the mass weighted average of (x-X_CoG)*(z-Z_CoG) for self, the current form object
+        """That function computes the average of (x-X_CoG)*(z-Z_CoG) for self, the current form object
 
                 :argument
                 ----------
@@ -402,6 +402,21 @@ class Form:
 
     def calcul_square_inertial_radius_x_mass_average(self, weightloading: loading.Loading, Y_Cog: float, Z_Cog: float,
                                                      x_start: float, x_end: float):
+        """That function calcul the mass weighted average of square of the inertial radius relating to the axis through the center of gravity
+        parallel to the x-axis.
+
+        :argument
+        ----------
+        Y_CoG: a float
+            the y coordinate of self, the current form
+        Z_CoG: a float
+            the z coordinate of self, the current form
+
+        :returns
+        -----------
+        rx2: a float
+            this is the mass weighted average of (y - y_CoG) ** 2 + (z - Z_CoG) ** 2
+        """
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -439,6 +454,21 @@ class Form:
 
     def calcul_square_inertial_radius_y_mass_average(self, weightloading: loading.Loading, X_Cog: float, Z_Cog: float,
                                                      x_start: float, x_end: float):
+        """That function calcul the mass weighted average of the square of the inertial radius relating to the axis through the center of gravity
+                        parallel to the y-axis.
+
+                        :argument
+                        ----------
+                        X_CoG: a float
+                            the x coordinate of self, the current form
+                        Z_CoG: a float
+                            the z coordinate of self, the current form
+
+                        :returns
+                        -----------
+                        ry2: a float
+                            this is the mass weighted average of (x - x_CoG) ** 2 + (z - Z_CoG) ** 2
+                        """
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -477,6 +507,21 @@ class Form:
 
     def calcul_square_inertial_radius_z_mass_average(self, weightloading: loading.Loading,
                                                      X_Cog: float, Y_Cog: float, x_start: float, x_end: float):
+        """That function calcul the mass weighted average of square of the inertial radius relating to the axis through the center of gravity
+                parallel to the z-axis.
+
+                :argument
+                ----------
+                X_CoG: a float
+                    the y coordinate of self, the current form
+                Y_CoG: a float
+                    the z coordinate of self, the current form
+
+                :returns
+                -----------
+                rz2: a float
+                    this is the mass weighted average of (x - X_CoG) ** 2 + (y - Y_CoG) ** 2
+                """
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -515,6 +560,19 @@ class Form:
 
     def calcul_xy_mass_average(self, weightloading: loading.Loading, X_Cog: float, Y_Cog: float, x_start: float,
                                x_end: float):
+        """That function computes the mass weighted average of (x-X_CoG)*(y-Y_CoG) for self, the current form object
+
+                :argument
+                ----------
+                X_CoG: a float
+                    the center of gravity of the current form along x-axis
+                Y_CoG: a float
+                    the center of gravity of the current form along y-axis
+
+                :returns
+                ----------
+                xy: a float
+                    the mass weighted average of the (x-X_CoG)*(y-Y_CoG) for the current form"""
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -553,6 +611,19 @@ class Form:
 
     def calcul_yz_mass_average(self, weightloading: loading.Loading, Y_Cog: float, Z_Cog: float, x_start: float,
                                x_end: float):
+        """That function computes the mass weighted average of (y-Y_CoG)*(z-Z_CoG) for self, the current form object
+
+                        :argument
+                        ----------
+                        Y_CoG: a float
+                            the center of gravity of the current form along y-axis
+                        Z_CoG: a float
+                            the center of gravity of the current form along z-axis
+
+                        :returns
+                        ----------
+                        yz: a float
+                            the mass weighted average of the (y-Y_CoG)*(z-Z_CoG) for the current form"""
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -590,6 +661,19 @@ class Form:
 
     def calcul_xz_mass_average(self, weightloading: loading.Loading, X_Cog: float, Z_Cog: float, x_start: float,
                                x_end: float):
+        """That function computes the mass weighted average of (x-X_CoG)*(z-Z_CoG) for self, the current form object
+
+                        :argument
+                        ----------
+                        X_CoG: a float
+                            the center of gravity of the current form along x-axis
+                        Z_CoG: a float
+                            the center of gravity of the current form along z-axis
+
+                        :returns
+                        ----------
+                        xz: a float
+                            the mass weighted average of the (x-X_CoG)*(z-Z_CoG) for the current form"""
         n = len(self.shape)
         sum = 0
         counter = 0
@@ -630,7 +714,7 @@ class Form:
     def calcul_every_parameters_mass_average(self, x_start: float, x_end: float, X_CoG: float, Y_CoG: float,
                                              Z_CoG: float, weightloading: loading.Loading):
         """That function creates a new form, it keeps just the frame between a section, from the x_start to the x_end.
-        For that form it computes all the information, the square of the inertial radius for every axis and the
+        For that form it computes all the information, the square of the inertial radius for every axis and the mass weighted
         average for xy, yz and xz.
 
         :argument
@@ -648,20 +732,20 @@ class Form:
 
         :returns
         ---------
-        radius_of_inertia_x2: a float
+        square_inertial_radius_x_mass_average: a float
             the square of the inertial radius relating to the axis through the center of gravity
-        parallel to the x-axis for the section
-        radius_of_inertia_y2: a float
+        parallel to the x-axis for the section, with mass weighted average
+        square_inertial_radius_y_mass_average: a float
             the square of the inertial radius relating to the axis through the center of gravity
-        parallel to the y-axis for the section
-        radius_of_inertia_z2: a float
+        parallel to the y-axis for the section, with mass weighted average
+        square_inertial_radius_z_mass_average: a float
             the square of the inertial radius relating to the axis through the center of gravity
-        parallel to the z-axis for the section
-        average_xy: a float
+        parallel to the z-axis for the section, with mass weighted average
+        mass_average_xy: a float
             the mass weighted average of (x-X_CoG)*(y-Y_CoG) for the section
-        average_yz: a float
+        mass_average_yz: a float
             the mass weighted average of (y-Y_CoG)*(z-Z_CoG) for the section
-        average_xz: a float
+        mass_average_xz: a float
             the mass weighted average of (x-X_CoG)*(z-Z_CoG) for the section"""
         radius_of_inertia_x2 = self.calcul_square_inertial_radius_x_mass_average(weightloading, Y_CoG, Z_CoG, x_start,
                                                                                  x_end)
