@@ -60,6 +60,8 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
         if line_formatted[0] == "wave" and line_formatted[1] == "length":
             try:
                 example_wave_length = float(line_formatted[2])
+                if example_wave_length==900:
+                    print(example_wave_frequency)
             except:
                 example_wave_length = 100000
         if line_formatted[0] == "wave" and line_formatted[1] == "angle":
@@ -90,19 +92,18 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
                 moment_along_x.append(element_moment_x)
                 moment_along_y.append(element_moment_y)
                 moment_along_z.append(element_moment_z)
-
     # list_x_coordinates=np.array(list_x_coordinates)
     # forces_along_z=np.array(forces_along_z)
     # moment_along_y=np.array(moment_along_y)
     # forces_along_z=(150-list_x_coordinates)*forces_along_z
     # print(100-list_x_coordinates,"les x")
     # moment_along_y=(110-list_x_coordinates)*moment_along_y
-    print(forces_along_x)
-    print(forces_along_y)
-    print(forces_along_z)
-    print(moment_along_x)
-    print(moment_along_y)
-    print(moment_along_z)
+    # print(forces_along_x)
+    # print(forces_along_y)
+    # print(forces_along_z)
+    # print(moment_along_x)
+    # print(moment_along_y)
+    # print(moment_along_z)
     all_graph = [forces_along_x, forces_along_y, forces_along_z, moment_along_x, moment_along_y, moment_along_z]
     list_title = ["x", "y", "z"]
     n_all_graph = len(all_graph)
@@ -117,4 +118,4 @@ def graph_file_for_one_wave(filename, wave_frequency, wave_length, wave_angle, w
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok", 0.248, 1000, 0, 0, "real")
+graph_file_for_one_wave("pdstrip.out.ok", 0.262, 900, 0, 0, "real")
