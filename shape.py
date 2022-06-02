@@ -277,8 +277,7 @@ class Form:
                 sum += (x - X_CoG) * (z - Z_CoG)  # we add the value for the actual point
         return sum / counter
 
-    def calcul_every_parameters(self, x_start: float, x_end: float, X_CoG: float, Y_CoG: float, Z_CoG: float,
-                                weightloading: loading.Loading):
+    def calcul_every_parameters(self, x_start: float, x_end: float, X_CoG: float, Y_CoG: float, Z_CoG: float):
         """That function creates a new form, it keeps just the frame between a section, from the x_start to the x_end.
         For that form it computes all the information, the square of the inertial radius for every axis and the
         average for xy, yz and xz.
@@ -317,8 +316,7 @@ class Form:
         for i in range(len(self.shape)):
             if x_start <= self.shape[i].x_coordinate <= x_end:
                 list_frame.__append__(self.shape[i])
-        radius_of_inertia_x2 = self.calcul_square_inertial_radius_x_mass_average(weightloading, Y_CoG, Z_CoG, x_start,
-                                                                                 x_end)
+        radius_of_inertia_x2 = list_frame.calcul_square_inertial_radius_x(Y_CoG, Z_CoG)
         radius_of_inertia_y2 = list_frame.calcul_square_inertial_radius_y(X_CoG, Z_CoG)
         radius_of_inertia_z2 = list_frame.calcul_square_inertial_radius_z(X_CoG, Y_CoG)
         average_xy = list_frame.calcul_average_xy(X_CoG, Y_CoG)

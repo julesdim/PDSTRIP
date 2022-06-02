@@ -155,8 +155,8 @@ def Writing_of_the_PDstrip_input_file(masses_filename: str, coordinates_filename
             x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG = \
                 hull_form.center_of_gravity_no_mass_for_coordinates(back_section, front_section)
         radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square, xy, yz, xz = \
-            hull_form.calcul_every_parameters_mass_average(back_section, front_section, x_coordinate_CoG,
-                                                           y_coordinate_CoG, z_coordinate_CoG, weight_loading)
+            hull_form.calcul_every_parameters(back_section, front_section, x_coordinate_CoG,
+                                                           y_coordinate_CoG, z_coordinate_CoG)
         data = [weight_of_the_current_part, x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG,
                 radius_of_inertia_x_square, radius_of_inertia_y_square, radius_of_inertia_z_square,
                 xy, yz, xz]
