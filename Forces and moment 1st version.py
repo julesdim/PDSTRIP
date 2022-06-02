@@ -62,7 +62,7 @@ def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: f
         if line_formatted[0] == "wave" and line_formatted[1] == "length":
             try:
                 example_wave_length = float(line_formatted[2])
-                if example_wave_length==1000:
+                if example_wave_length==wave_length:
                     print(example_wave_frequency)
             except:
                 example_wave_length = 100000
@@ -72,10 +72,9 @@ def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: f
             example_wave_speed = float(line_formatted[1])
         if line_formatted[0] == "Number":
             number_of_section = float(line_formatted[3])
-        if example_wave_length == wave_length and example_wave_angle == wave_angle and \
-                example_wave_frequency == wave_frequency and example_wave_speed == wave_speed:
+        if example_wave_length == wave_length and example_wave_angle == wave_angle and example_wave_speed == wave_speed:
             if line_formatted[0] == "Force":
-                x_coordinate = float(line_formatted[1])+135/2
+                x_coordinate = float(line_formatted[1])+100/2
                 element_force_x = float(line_formatted[2 + constant])
                 element_force_y = float(line_formatted[5 + constant])
                 element_force_z = float(line_formatted[8 + constant])
@@ -110,7 +109,7 @@ def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: f
     list_title = ["x", "y", "z"]
     n_all_graph = len(all_graph)
     for i in range (len(list_x_coordinates)):
-        file_writed.write(str(list_x_coordinates[i]))
+        file_writed.write(str(list_x_coordinates[i])+" ")
         for graph in all_graph:
             file_writed.write(str(graph[i]) + " ")
         file_writed.write("\n")
@@ -118,11 +117,11 @@ def graph_file_for_one_wave(filename: str, wave_frequency: float, wave_length: f
         plt.plot(list_x_coordinates, all_graph[i])
         plt.grid()
         if i <= 2:
-            plt.title("Forces along " + list_title[i] + " axis" + " " + text)
+            plt.title("Forces along " + list_title[i] + " axis" + " " + text + " wave length = " + str(wave_length)+"m")
         if i > 2:
-            plt.title("Moment along " + list_title[i - 3] + " axis" + " " + text)
+            plt.title("Moment along " + list_title[i - 3] + " axis" + " " + text + " wave length = " + str(wave_length)+"m")
         plt.show()
     return
 
 
-graph_file_for_one_wave("pdstrip.out.ok", 0.7, 125.75, 0, 0, "real")
+graph_file_for_one_wave("pdstrip.out.ok", 0.248, 6161.7, 0, 0, "real")
