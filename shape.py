@@ -757,3 +757,4 @@ class Form:
         average_yz = self.calcul_yz_mass_average(weightloading, Y_CoG, Z_CoG, x_start, x_end)
         average_xz = self.calcul_xz_mass_average(weightloading, X_CoG, Z_CoG, x_start, x_end)
         return radius_of_inertia_x2, radius_of_inertia_y2, radius_of_inertia_z2, average_xy, average_yz, average_xz
+
