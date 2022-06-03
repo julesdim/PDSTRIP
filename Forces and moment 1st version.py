@@ -200,4 +200,4 @@ def graph_many_speed(filename, first_speed, last_speed, wave_length, angle, text
 
 #graph_file_for_one_wave("pdstrip.out.ok", 183.17, 0, 0, "real", True, True, "speed")
 graph_many_wave_length("pdstrip.out.ok", 100, 100000, 5, 0, "real")
-graph_many_speed("pdstrip.out.ok",0,10,246.47,0,"real")
+graph_many_speed("pdstrip.out.ok",0,10,800,0,"real")
