@@ -96,7 +96,8 @@ def graph_file_for_one_wave(filename: str, wave_length: float, wave_angle: float
                 moment_along_y.append(element_moment_y)
                 moment_along_z.append(element_moment_z)
     # list_x_coordinates=np.array(list_x_coordinates)
-    # forces_along_z=np.array(forces_along_z)
+    forces_along_z=np.array(forces_along_z)
+    #forces_along_z=forces_along_z*((2*np.pi/wave_length)**2)*2250
     # moment_along_y=np.array(moment_along_y)
     # forces_along_z=(140-list_x_coordinates)*forces_along_z
     # print(100-list_x_coordinates,"les x")
@@ -199,5 +200,5 @@ def graph_many_speed(filename, first_speed, last_speed, wave_length, angle, text
     return
 
 #graph_file_for_one_wave("pdstrip.out.ok", 183.17, 0, 0, "real", True, True, "speed")
-graph_many_wave_length("pdstrip.out.ok", 100, 800, 0, 0, "real")
+graph_many_wave_length("pdstrip.out.ok", 100, 10000, 0, 0, "real")
 graph_many_speed("pdstrip.out.ok",0,10,1540.43,0,"real")
