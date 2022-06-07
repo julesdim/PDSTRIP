@@ -110,6 +110,7 @@ def collection_of_mass(filename: str):
                                      z_coordinate_CoG, linear_density_x_beginning, linear_density_x_end)
             if x_coordinate_CoG != (x_beginning + x_end) / 2:
                 current_mass.calcul_xg_not_the_mid()
+                print(current_mass.linear_density_start, current_mass.linear_density_end)
             weight_loading.__append__(current_mass)
     return weight_loading
 
