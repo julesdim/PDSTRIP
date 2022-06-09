@@ -1,4 +1,0 @@
-all:
-
-dist-clean:
-	$(RM) *~
