@@ -173,4 +173,4 @@ masses1 = "masses1.csv"
 shape1 = "barge_standaard_pias_text_file.txt"
 masses2 = "masses.csv"
 shape2 = "oural_standaard_pias_text_file.txt"
-Writing_of_the_PDstrip_input_file(masses1, "try.asc", 100)
+Writing_of_the_PDstrip_input_file(masses1, shape1, 100)
