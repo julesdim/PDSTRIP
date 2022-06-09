@@ -95,7 +95,7 @@ def collection_of_mass(filename: str):
     total_mass = 0  # to check the total weight
     for line in the_lines:
         line_formatted = line.strip("\n").split(
-            ";")  # we stop the line to the \n and we cut the information where there is a ";"
+            )  # we stop the line to the \n and we cut the information where there is a ";"
         current_weight = float(line_formatted[0])  # the first info is the object weight
         total_mass += current_weight
         x_beginning = float(line_formatted[1])  # the second is the beginning
@@ -171,6 +171,6 @@ def Writing_of_the_PDstrip_input_file(masses_filename: str, coordinates_filename
 
 masses1 = "masses1.csv"
 shape1 = "barge_standaard_pias_text_file.txt"
-masses2 = "masses.csv"
+masses2 = "route sud mass.txt"
 shape2 = "oural_standaard_pias_text_file.txt"
-Writing_of_the_PDstrip_input_file(masses1, shape1, 100)
+Writing_of_the_PDstrip_input_file(masses2, shape2, 135)
