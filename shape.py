@@ -352,7 +352,7 @@ class Form:
         fig = plt.figure()
         ax = fig.gca(projection="3d")
         ax.scatter(list_x_coordinates, list_y_coordinates, list_z_coordinates, label="courbe", marker='d')
-        ax.set_title('Hull shape of the simple barge')
+        ax.set_title('Hull shape of the Oural, South Route')
         plt.tight_layout()
         plt.show()
 
