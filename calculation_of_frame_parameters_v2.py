@@ -149,7 +149,12 @@ def Writing_of_the_PDstrip_input_file(masses_filename: str, coordinates_filename
     for i in range(len(hull_form.shape) - 1):
         back_section = (hull_form.shape[i+1].x_coordinate + hull_form.shape[i].x_coordinate) / 2
         front_section = conversion_for_pdstrip_xaxis(Lpp, Lpp / 2)
-        weight_of_the_current_part = weight_loading.mass_calculation_for_coordinates(back_section, front_section)
+        if i< len(hull_form.shape)-2:
+            back_section_next=(hull_form.shape[i+2].x_coordinate + hull_form.shape[i+1].x_coordinate) / 2
+            weight_of_the_current_part = weight_loading.mass_calculation_for_coordinates(back_section, front_section) - \
+                                     weight_loading.mass_calculation_for_coordinates(back_section_next,front_section)
+        elif i==len(hull_form.shape)-2:
+            weight_of_the_current_part = weight_loading.mass_calculation_for_coordinates(back_section, front_section)
         try:
             x_coordinate_CoG, y_coordinate_CoG, z_coordinate_CoG = \
                 weight_loading.calcul_center_of_gravity_for_coordinates(back_section, front_section)

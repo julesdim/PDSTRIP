@@ -64,8 +64,8 @@ def graph_file_for_one_wave(filename: str, wave_length: float, wave_angle: float
         if line_formatted[0] == "wave" and line_formatted[1] == "length":
             try:
                 example_wave_length = float(line_formatted[2])
-                #if example_wave_length == wave_length:
-                    #print(example_wave_frequency)
+                # if example_wave_length == wave_length:
+                # print(example_wave_frequency)
             except:
                 example_wave_length = 100000
         if line_formatted[0] == "wave" and line_formatted[1] == "angle":
@@ -76,7 +76,7 @@ def graph_file_for_one_wave(filename: str, wave_length: float, wave_angle: float
             number_of_section = float(line_formatted[3])
         if example_wave_length == wave_length and example_wave_angle == wave_angle and example_wave_speed == wave_speed:
             if line_formatted[0] == "Force":
-                x_coordinate = float(line_formatted[1]) + 100 / 2
+                x_coordinate = float(line_formatted[1]) + 135 / 2
                 element_force_x = float(line_formatted[2 + constant])
                 element_force_y = float(line_formatted[5 + constant])
                 element_force_z = float(line_formatted[8 + constant])
@@ -96,8 +96,8 @@ def graph_file_for_one_wave(filename: str, wave_length: float, wave_angle: float
                 moment_along_y.append(element_moment_y)
                 moment_along_z.append(element_moment_z)
     # list_x_coordinates=np.array(list_x_coordinates)
-    forces_along_z=np.array(forces_along_z)
-    #forces_along_z=forces_along_z*((2*np.pi/wave_length)**2)*2250
+    forces_along_z = np.array(forces_along_z)
+    # forces_along_z=forces_along_z*((2*np.pi/wave_length)**2)*2250
     # moment_along_y=np.array(moment_along_y)
     # forces_along_z=(140-list_x_coordinates)*forces_along_z
     # print(100-list_x_coordinates,"les x")
@@ -122,10 +122,10 @@ def graph_file_for_one_wave(filename: str, wave_length: float, wave_angle: float
         subplot2 = fig.add_subplot(1, 2, 2)
         global list_subplot
         list_subplot = [subplot1, subplot2]
-    if text_fonction=="speed":
-        legend=str(wave_speed)
-    if text_fonction=="wave length":
-        legend=str(wave_length)
+    if text_fonction == "speed":
+        legend = str(wave_speed)
+    if text_fonction == "wave length":
+        legend = str(wave_length)
     for i in range(n_all_graph):
         list_subplot[i].plot(list_x_coordinates, all_graph[i], label=legend)
         plt.grid()
@@ -147,7 +147,7 @@ def graph_many_wave_length(filename, first_wave_length, last_wave_length, speed,
     the_lines = csv.reader(file)
     boolean_print = False
     example_wave_length = 0
-    text_fonction="wave length"
+    text_fonction = "wave length"
     for line in the_lines:
         try:
             line_formatted = line[0].strip().split()
@@ -167,8 +167,10 @@ def graph_many_wave_length(filename, first_wave_length, last_wave_length, speed,
             bool_initialisation = False
         if i == len(list_wave_length) - 1:
             boolean_print = True
-        graph_file_for_one_wave(filename, wave_length, angle, speed, text, boolean_print, bool_initialisation, text_fonction)
+        graph_file_for_one_wave(filename, wave_length, angle, speed, text, boolean_print, bool_initialisation,
+                                text_fonction)
     return
+
 
 def graph_many_speed(filename, first_speed, last_speed, wave_length, angle, text):
     list_speed = []
@@ -177,7 +179,7 @@ def graph_many_speed(filename, first_speed, last_speed, wave_length, angle, text
     the_lines = csv.reader(file)
     boolean_print = False
     example_wave_length = 0
-    text_fonction="speed"
+    text_fonction = "speed"
     for line in the_lines:
         try:
             line_formatted = line[0].strip().split()
@@ -195,10 +197,83 @@ def graph_many_speed(filename, first_speed, last_speed, wave_length, angle, text
         speed = list_speed[i]
         if i == len(list_speed) - 1:
             boolean_print = True
-        graph_file_for_one_wave(filename, wave_length, angle, speed, text, boolean_print, bool_initialisation, text_fonction)
+        graph_file_for_one_wave(filename, wave_length, angle, speed, text, boolean_print, bool_initialisation,
+                                text_fonction)
         bool_initialisation = False
     return
 
-#graph_file_for_one_wave("pdstrip.out.ok", 183.17, 0, 0, "real", True, True, "speed")
-graph_many_wave_length("pdstrip.out.ok", 100, 10000, 0, 0, "real")
-graph_many_speed("pdstrip.out.ok",0,10,246.47,0,"real")
+
+def printing_the_extreme_point(filename, text):
+    if text == "real":
+        constant = 0
+    elif text == "imaginary":
+        constant = 1
+    elif text == "absolute":
+        constant = 2
+    file = open(filename, "r", encoding="utf-8")
+    extreme_point_shear_forces = 0
+    extreme_point_bending_moments = 0
+    wave_length_extremesf = 0
+    wave_length_extremebm = 0
+    speed_extremebm = 0
+    speed_extremesf = 0
+    angle_extremesf = 0
+    angle_extremebm = 0
+    the_lines = csv.reader(file)
+    line_counter = 0
+    number_of_section = 0
+    example_wave_frequency = 0
+    example_wave_length = 0
+    example_wave_angle = 0
+    example_wave_speed = 0
+    for line in the_lines:
+        try:
+            line_formatted = line[0].strip().split()
+        except IndexError:
+            pass
+        if len(line_formatted) == 0:
+            line_formatted = ["error", "error", "error"]
+        if line_formatted[0] == "wave" and line_formatted[2] == "frequency":
+            example_wave_frequency = float(line_formatted[3])
+        if line_formatted[0] == "wave" and line_formatted[1] == "length":
+            try:
+                example_wave_length = float(line_formatted[2])
+                # if example_wave_length == wave_length:
+                # print(example_wave_frequency)
+            except:
+                example_wave_length = 100000
+        if line_formatted[0] == "wave" and line_formatted[1] == "angle":
+            example_wave_angle = float(line_formatted[2])
+        if line_formatted[0] == "speed":
+            example_wave_speed = float(line_formatted[1])
+        if line_formatted[0] == "Number":
+            number_of_section = float(line_formatted[3])
+        if line_formatted[0] == "Force":
+            x_coordinate = float(line_formatted[1]) + 135 / 2
+            element_force_z = float(line_formatted[8 + constant])
+            if abs(element_force_z) > extreme_point_shear_forces:
+                extreme_point_shear_forces = abs(element_force_z)
+                wave_length_extremesf = example_wave_length
+                speed_extremesf = example_wave_speed
+                angle_extremesf = example_wave_angle
+        if line_formatted[0] == "Moment":
+            line_counter += 1
+            element_moment_y = float(line_formatted[4 + constant])
+            if abs(element_moment_y) > extreme_point_bending_moments:
+                extreme_point_bending_moments = abs(element_moment_y)
+                wave_length_extremebm = example_wave_length
+                speed_extremebm = example_wave_speed
+                angle_extremebm = example_wave_angle
+    return (extreme_point_shear_forces, wave_length_extremesf, speed_extremesf, angle_extremesf,
+            extreme_point_bending_moments, wave_length_extremebm, speed_extremebm, angle_extremebm)
+
+
+# graph_file_for_one_wave("pdstrip.out.ok", 183.17, 0, 0, "real", True, True, "speed")
+graph_many_wave_length("pdstrip.out1.ok", 100, 10000, 0, 180, "real")
+graph_many_speed("pdstrip.out1.ok", 0, 10, 125.75, 180, "real")
+
+extreme_point=printing_the_extreme_point("pdstrip.out1.ok","real")
+
+graph_file_for_one_wave("pdstrip.out1.ok",125.75,180,0,"real",True, True,"speed")
+graph_file_for_one_wave("pdstrip.out1.ok",42.79,100.0,4.17,"real",True, True,"speed")
+print(extreme_point)
