@@ -112,6 +112,7 @@ def collection_of_mass(filename: str):
                 current_mass.calcul_xg_not_the_mid()
                 print(current_mass.linear_density_start, current_mass.linear_density_end)
             weight_loading.__append__(current_mass)
+    print(total_mass,"TOTAL")
     return weight_loading
 
 
