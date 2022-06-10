@@ -270,10 +270,10 @@ def printing_the_extreme_point(filename, text):
 
 # graph_file_for_one_wave("pdstrip.out.ok", 183.17, 0, 0, "real", True, True, "speed")
 graph_many_wave_length("pdstrip.out3.ok", 100, 10000, 0, 0, "real")
-graph_many_speed("pdstrip.out3.ok", 0, 10, 1540.43, 0, "real")
+graph_many_speed("pdstrip.out3.ok", 0, 10, 42.79, 100, "real")
 
-extreme_point=printing_the_extreme_point("pdstrip.out3.ok","real")
+extreme_point=printing_the_extreme_point("pdstrip.out1.ok","real")
 
 graph_file_for_one_wave("pdstrip.out3.ok",125.75,180,0,"real",True, True,"speed")
-graph_file_for_one_wave("pdstrip.out3.ok",42.79,100.0,4.17,"real",True, True,"speed")
+graph_file_for_one_wave("pdstrip.out3.ok",42.79,100.0,0,"real",True, True,"speed")
 print(extreme_point)
